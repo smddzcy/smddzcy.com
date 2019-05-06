@@ -2,9 +2,13 @@ import register from 'navi-scripts/register';
 import { createBrowserNavigation } from 'navi';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactGA from 'react-ga';
 import { Router } from 'react-navi';
 import './index.module.css';
 import routes from './routes';
+
+ReactGA.initialize('UA-43755905-3');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 // `register()` is responsible for exporting your app's pages and App
 // component to the static renderer, and for starting the app with the
@@ -23,6 +27,10 @@ register({
     // so. If you want to load other data in parallel while the initial page is
     // loading, make sure to start loading before this line.
     await navigation.getRoute();
+
+    navigation.history.listen(location => {
+      ReactGA.pageview(location.pathname + location.search);
+    });
 
     // React requires that you call `ReactDOM.hydrate` if there is statically
     // rendered content in the root element, but prefers us to call
