@@ -1,0 +1,6 @@
+export default {
+  title: '{{ title }}',
+  tags: [{{#each tags }}'{{ this }}'{{#unless @last}}, {{/unless}}{{/each}}],
+  spoiler: '{{ spoiler }}',
+  getContent: () => import('./document.mdx'),
+};
