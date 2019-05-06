@@ -100,6 +100,11 @@ const routes = compose(
     // but the route is defined here so that the static renderer will pick it
     // up.
     '/rss': route(),
+
+    '/:unknown': route({
+      title: 'Not Found',
+      view: import('../components/NotFoundPage'),
+    }),
   }),
 );
 

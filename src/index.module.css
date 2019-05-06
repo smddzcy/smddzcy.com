@@ -83,3 +83,9 @@
 :global blockquote p {
   display: inline;
 }
+:global hr {
+  background: hsla(0,0%,0%,0.2);
+  border: none;
+  height: 1px;
+  margin: 2rem 0;
+}
