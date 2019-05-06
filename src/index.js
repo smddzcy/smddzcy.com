@@ -7,8 +7,10 @@ import { Router } from 'react-navi';
 import './index.module.css';
 import routes from './routes';
 
-ReactGA.initialize('UA-43755905-3');
-ReactGA.pageview(window.location.pathname + window.location.search);
+if (process.env.NODE_ENV === 'production') {
+  ReactGA.initialize('UA-43755905-3');
+  ReactGA.pageview(window.location.pathname + window.location.search);
+}
 
 // `register()` is responsible for exporting your app's pages and App
 // component to the static renderer, and for starting the app with the
@@ -28,9 +30,11 @@ register({
     // loading, make sure to start loading before this line.
     await navigation.getRoute();
 
-    navigation.history.listen(location => {
-      ReactGA.pageview(location.pathname + location.search);
-    });
+    if (process.env.NODE_ENV === 'production') {
+      navigation.history.listen(location => {
+        ReactGA.pageview(location.pathname + location.search);
+      });
+    }
 
     // React requires that you call `ReactDOM.hydrate` if there is statically
     // rendered content in the root element, but prefers us to call
