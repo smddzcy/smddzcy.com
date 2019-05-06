@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[11],{141:function(e,p,t){"use strict";t.r(p),p.default={title:"Migrating from Apache/mod_php to Apache/php-fpm",tags:["php","apache","mod_php","php-fpm","php7"],spoiler:"Today is the day. After receiving tons of emails from Jetpack and seeing my server down countless times over the last couple of weeks, I finally made the switch from mod_php to php-fpm.",getContent:function(){return t.e(22).then(t.bind(null,128))}}}}]);
-//# sourceMappingURL=11.d35b67b7.chunk.js.map

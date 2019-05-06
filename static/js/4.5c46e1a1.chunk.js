@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{134:function(t,e,i){"use strict";i.r(e),e.default={title:"Multi-Threading in PHP7 w/ pThreads",tags:["php7","tutorial","pthreads","multi-threading"],spoiler:"Almost a year ago, I came across with this pThreads extension. It's an extension that makes it possible to create multi-threaded applications in PHP, and I completely fell in love with it.",getContent:function(){return i.e(15).then(i.bind(null,117))}}}}]);
-//# sourceMappingURL=4.5c46e1a1.chunk.js.map
