@@ -30,7 +30,7 @@ IntStream infiniteStream = IntStream.iterate(1, el -> el + 1)
                               .filter(el -> el % 2 == 0);
 ```
 
-Code shown above creates an infinite integer stream, and filters the odd ones. One might expect that when we execute this code, it will cause an infinite loop, eventually fill the whole memory and then crash. But since the streams are *lazy* and only evaluated when accessed, this code doesn't cause any problem. But if we add a terminal operation like this:
+Code shown above creates an infinite integer stream, and filters the odd ones. One might expect that when we execute this code, it will cause an infinite loop, eventually fill the whole memory and then crash. But since the streams are *lazy* and only evaluated when accessed, this works just fine. _But_, if we add a terminal operation like this:
 
 ```java
 List<Integer> infiniteStream = IntStream.iterate(1, el -> el + 1)
