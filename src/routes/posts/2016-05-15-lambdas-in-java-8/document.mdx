@@ -28,7 +28,7 @@ Right part of the expression above, `(o1, o2) -> o1 - o2`  is a _lambda expre
 Comparator withJava8 = (o1, o2) -> o1 - o2; // fails to compile
 ```
 
-By the way, lambdas are not just fancied anonymous classes. They separate themselves from anonymous classes in the lower levels of Java. Some of the differences between them are listed below.
+By the way, lambdas are not just fancy anonymous classes. They separate themselves from anonymous classes in the lower levels of Java. Some of the differences between them are listed below.
 
 * Lambdas are not implemented using anonymous classes; meaning they don't take space in the disk as .class  files and it speeds up the start time of JVM.
 * Types used in lambdas are not explicit, they are determined from the context.
