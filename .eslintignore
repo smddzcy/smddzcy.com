@@ -1,0 +1,12 @@
+node_modules/
+.idea
+.DS_Store
+.vscode
+.gitignore
+.nyc_output
+package-lock.json
+yarn.lock
+yarn-error.log
+coverage/
+docs/
+public/
