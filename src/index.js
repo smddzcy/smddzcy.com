@@ -7,11 +7,6 @@ import { Router } from 'react-navi';
 import './index.module.css';
 import routes from './routes';
 
-if (process.env.NODE_ENV === 'production') {
-  ReactGA.initialize('UA-43755905-3');
-  ReactGA.pageview(window.location.pathname + window.location.search);
-}
-
 // `register()` is responsible for exporting your app's pages and App
 // component to the static renderer, and for starting the app with the
 // `main()` function when running within a browser.
@@ -31,6 +26,8 @@ register({
     await navigation.getRoute();
 
     if (process.env.NODE_ENV === 'production') {
+      ReactGA.initialize('UA-43755905-3');
+      ReactGA.pageview(window.location.pathname + window.location.search);
       navigation.history.listen(location => {
         ReactGA.pageview(location.pathname + location.search);
       });
