@@ -1,0 +1,84 @@
+<div>
+
+Although I don't prefer Java as my day-to-day language - mostly because of the sizes of my projects, it is a language that I really like programming in. A single Java code can run on almost all types of machines, the syntax is great, it is full OOP - something I really like, it has so many quality libraries to chose from and the list goes on. It has its bad parts, too. The major problem that affects my preference about Java, I think most of you out there will agree with me, is verbosity. But a big step was taken in Java 8 to a more functional & less verbose programming language. One of the most important features of Java 8 is _lambda expressions_.
+
+Example
+-------
+
+Creating a Comparator before Java 8 was like this:
+
+```java
+Comparator<Integer> beforeJava8 = new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 - o2;
+            }
+        };
+```
+
+With Java 8, it's like this:
+
+```java
+Comparator<Integer> withJava8 = (o1, o2) -> o1 - o2;
+```
+
+Right part of the expression above, `(o1, o2) -> o1 - o2`  is a _lambda expression_. It takes `o1`, `o2`  as parameters of the `compare` method of `Comparator`, and returns `o1 - o2` . `->`  is the separator - called _lambda operator_, of the lambda expression. It separates **parameters** from the **body** of the lambda expression. In a lambda expression, we don't have to declare the types explicitly. Java can determine the types from the context. Since the type we declared as arguments of Comparator is Integer , Java can infer the types of `o1` and `o2` as `Integer`. But if we remove the type from the Comparator declaration and write something like this, **code will not compile** since Java can't infer the types.
+
+```java
+Comparator withJava8 = (o1, o2) -> o1 - o2; // fails to compile
+```
+
+By the way, lambdas are not just fancied anonymous classes. They separate themselves from anonymous classes in the lower levels of Java. Some of the differences between them are listed below.
+
+* Lambdas are not implemented using anonymous classes; meaning they don't take space in the disk as .class  files and it speeds up the start time of JVM.
+* Types used in lambdas are not explicit, they are determined from the context.
+* Variables cannot be shadowed in a lambda expression. If attempted, it gives a compile time error.
+* this refers to the class that uses the lambda expression. On anonymous classes, it refers to anonymous class itself.
+
+How it works
+------------
+
+If we look at the declaration of Comparator interface, we see a new annotation.
+
+```java
+@FunctionalInterface
+public interface Comparator<T> {
+```
+
+_**Lambdas can only be used on functional interfaces, which has exactly one abstract method. **(Default methods aren't counted as abstract)_ `@FunctionalInterface` annotation is not something that functional interfaces _must_ have, but it's a good sign both for us and the Java to understand that an interface is a functional interface. Do we have to write all of the functional interfaces we're going to use ? Of course not. Java 8 comes with a great number of functional interfaces, located in `java.util.function` package.
+
+### java.util.function.Consumer
+
+Consumer interface performs an operation on an argument.
+
+```java
+Consumer<String> consumer = (s) -> System.out.println(s);
+```
+
+### java.util.function.Supplier
+
+Supplier interface takes no argument, but produces a result.
+
+```java
+Supplier<Long> supplier = () -> System.nanoTime();
+```
+
+### java.util.function.Function
+
+Function interface takes one argument, and produces a result.
+
+```java
+Function<String, Integer> function = (s) -> s.length();
+```
+
+### java.util.function.Predicate
+
+Predicate interface takes one argument, and returns the result of an evaluation on that argument.
+
+```java
+Predicate<String> predicate = (s) -> s.length() == 1;
+```
+
+Another great feature of Java 8 is **Stream API**, which will be covered on a later post. It provides a greater functionality to Java, and also it is a _perfect fit_ for lambda expressions. Until then, _Valéte!_
+
+</div>

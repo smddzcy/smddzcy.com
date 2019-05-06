@@ -1,0 +1,238 @@
+import threadFigure from './thread-figure.png'
+import threadLifeCycle from './diagram-thread-life-cycle.png'
+
+<div>
+
+Today I'm going to talk a little bit about **multithreading in Java**.
+
+A *thread* is a small component of a *process*, that can run concurrently with the other components (threads). It differs from a *process* in several ways but the most important thing is; **threads share the same state, while processes are independent units**. This means that all threads of a process share the same process state, memory space and resources.  
+
+<img src={threadFigure} alt="Threads of a process" style={{ maxWidth: 320, marginTop: '2rem', marginBottom: '2rem' }} />
+
+You can think of it as a worker, working in parallel with other workers. Let's say that your house needs painting. If you hire 1 worker, it'd take him 10 hours to paint the entire house. But if you hire 5 workers, and if all of them work concurrently on different parts of the house, it'd take only 2 hours. Also, they share the same resources (paint) and the same space (house). This is just how the threads work.
+
+## Life Cycle of a Thread
+
+A thread's lifecycle consists of different stages. For example; a thread *starts*, *waits* for another thread to perform a necessary task, *executes* its task, and *dies*. It can be in only one stage at a given time. The life cycle of a thread is controlled by JVM.
+
+<img src={threadLifeCycle} alt="Diagram - Life cycle of a thread" />
+
+Here are the stages in detail:
+
+- **New**: A *born thread*. It is the stage before the program starts the thread.
+- **Runnable**: After the program starts the thread, it becomes *runnable*. It means that it is executing its task in JVM.
+- **Non-Runnable (Blocked)**: The thread is still alive, but it is not eligible to execute its task. It is currently waiting for an object's monitor (for details: [Mutual exclusion](https://en.wikipedia.org/wiki/Mutual_exclusion)). It mostly happens when the thread is waiting for access to synchronized code.
+- **Waiting**: The thread is waiting for another thread to complete a task.
+- **Timed Waiting**: The thread is waiting for another thread to complete a task, but up to a certain amount of time. It'll go back to runnable stage when that time interval expires or the other thread completes its task.
+- **Terminated (Dead)**: The thread has completed its task or it is terminated.
+
+Now, let's get to our main subject: *multithreading*.
+
+Multithreading is the process of running multiple threads of a process at the same time. Let me start by creation of a thread.
+
+## Creating a Thread
+
+There are some useful methods of `Thread` class which we are going to use:
+
+- `start()`: Begins the execution, JVM calls the run() method of this thread.
+- `join()` or `join(long millis)`: Waits for the thread to die. The one takes an argument waits for a maximum of millis milliseconds. (if 0, waits forever - same as join())
+- `setPriority(int newPriority)`: Sets the priority of this thread.
+- `getPriority()`: Returns the priority of this thread. setName(String name): Sets the name of this thread.
+- `getName()`: Returns the name of this thread.
+- `isAlive()`: Returns a boolean indicating if the thread is alive or not.
+- `stop()`: Stops the thread. This method *currently* exists but **don't use it to stop threads**, since it's deprecated and its usage is not recommended. If you want to stop a thread, see [Java docs](http://docs.oracle.com/javase/1.5.0/docs/guide/misc/threadPrimitiveDeprecation.html).
+
+### Option 1: Extending the Thread Class
+
+It is as simple as extending the Thread class and overriding the run method. Example:
+
+```java
+private static class MyThread extends Thread {
+    public MyThread(String name) {
+        super(name);
+    }
+
+    @Override
+    public void run() {
+        System.out.println(getName() + " is running.");
+    }
+}
+
+public static void main(String[] args) {
+    Thread t1 = new MyThread("Thread 1");
+    Thread t2 = new MyThread("Thread 2");
+    t1.start();
+    t2.start();
+}
+```
+
+Output:
+
+```
+Thread 1 is running.
+Thread 2 is running.
+```
+
+### Option 2: Implementing the Runnable Interface
+
+Actually, what we did above was just implementing the Runnable interface. It is also possible to explicitly implement that and create a Thread object with that implementation. The Thread class has a constructor which accepts a Runnable object. Example:
+
+```java
+private static class MyWorker implements Runnable {
+    private String name;
+
+    public MyWorker(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(name + " is running.");
+    }
+}
+
+public static void main(String[] args) {
+    Runnable worker1 = new MyWorker("Worker 1");
+    Runnable worker2 = new MyWorker("Worker 2");
+
+    Thread t1 = new Thread(worker1);
+    Thread t2 = new Thread(worker2);
+
+    t1.start();
+    t2.start();
+}
+```
+
+Output:
+
+```
+Worker 1 is running.
+Worker 2 is running.
+```
+
+There are also other ways to run these workers. One of them is creating a *thread pool*. I'm not getting into its details but here is a simple example with the same `MyWorker` class:
+
+```java
+public static void main(String[] args) {
+    Runnable worker1 = new MyWorker("Worker 1");
+    Runnable worker2 = new MyWorker("Worker 2");
+
+    // This creates a fixed size thread poll.
+    // You can also create a single thread executor with
+    // \`Executors.newSingleThreadExecutor()\` and an expandable
+    // thread pool with \`Executors.newCachedThreadPool()\`
+    ExecutorService e = Executors.newFixedThreadPool(2);
+
+    e.execute(worker1);
+    e.execute(worker2);
+
+    // Previously submitted tasks will be executed,
+    // but no new tasks will be accepted after this.
+    e.shutdown();
+}
+```
+
+See for details: [https://docs.oracle.com/javase/tutorial/essential/concurrency/pools.html](https://docs.oracle.com/javase/tutorial/essential/concurrency/pools.html)
+
+### Option 3: Using Anonymous Class
+
+It is the dirty way of creating a thread. Same as option 2, but just *dirtier*. Example:
+
+```java
+public static void main(String[] args) {
+    Thread t = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            System.out.println("Thread is executing its task.");
+            dummyTask();
+            System.out.println("Thread is finished its task.");
+        }
+
+        private void dummyTask() {
+            for (int i = 0; i < 11; i++) {
+                System.out.print(i + " ");
+            }
+            System.out.println();
+        }
+    });
+    t.start();
+    System.out.println("Test string");
+}
+```
+
+Output:
+
+```
+Test string
+Thread is executing its task.
+0 1 2 3 4 5 6 7 8 9 10
+Thread is finished its task.
+```
+
+## Thread Priority
+
+We say that all threads run concurrently; but in reality, it is not the case. It feels like it is a concurrent environment, but your system cannot run all of your threads simultaneously. There is a **thread scheduler** in JVM that decides which thread to run, based on many factors including *priority*. Every thread in Java has a priority between `MIN_PRIORITY` and `MAX_PRIORITY`. If you don't set it, its default is `NORM_PRIORITY`.
+
+```java
+/**
+ * The minimum priority that a thread can have.
+ */
+public final static int MIN_PRIORITY = 1;
+
+/**
+ * The default priority that is assigned to a thread.
+ */
+public final static int NORM_PRIORITY = 5;
+
+/**
+ * The maximum priority that a thread can have.
+ */
+public final static int MAX_PRIORITY = 10;
+```
+
+It *hopefully* determines the order of execution of the threads; however, **it doesn't guarantee it**. As I've said, it's just one of those *many factors*. Example of thread priority:
+
+```java
+private static class MyThread extends Thread {
+    public MyThread(String name, int priority) {
+        setName(name);
+        setPriority(priority);
+    }
+
+    @Override
+    public void run() {
+        dummyJob();
+        System.out.println(getName() + " is finished.");
+    }
+
+    private String dummyJob() {
+        String s = "";
+        for (int i = 0; i < 10000; i++) {
+            s += "dummy";
+        }
+        return s;
+    }
+}
+
+public static void main(String[] args) {
+    Thread t1 = new MyThread("Priority:1", 1);
+    Thread t2 = new MyThread("Priority:5", 5);
+    Thread t3 = new MyThread("Priority:10", 10);
+
+    t1.start();
+    t2.start();
+    t3.start();
+}
+```
+
+Output:
+
+```
+Priority:10 is finished.
+Priority:5 is finished.
+Priority:1 is finished.
+```
+
+This is it for now. Next time I'll get into the details of multithreading and talk about **java.util.concurrent** package. Have a great day!
+
+</div>

@@ -1,0 +1,153 @@
+<div>
+
+Today I'm going to talk about **thread synchronization**. Let's start with writing a simple multi-threaded counter.
+
+```java
+private static int count = 0;
+
+private static class CounterThread extends Thread {
+    public CounterThread(String name) {
+        super(name);
+    }
+
+    @Override
+    public void run() {
+        while (count < 10) {
+            System.out.printf("Thread:%s, counter:%d\\n", getName(), count);
+            count++;
+        }
+    }
+}
+
+public static void main(String\[\] args) {
+    Thread t1 = new CounterThread("t1");
+    Thread t2 = new CounterThread("t2");
+    t1.start();
+    t2.start();
+}
+```
+
+We expect to see a nice incrementation of the count variable, sometimes by the thread 1 and sometimes by the thread 2. Here is the output this code produces:
+
+```
+Thread:t2, counter:0
+Thread:t1, counter:0
+Thread:t1, counter:2
+Thread:t1, counter:3
+Thread:t1, counter:4
+Thread:t1, counter:5
+Thread:t2, counter:1
+Thread:t2, counter:7
+Thread:t2, counter:8
+Thread:t2, counter:9
+Thread:t1, counter:6
+```
+
+This is definitely not the outcome we expected. What is wrong with those first 2 lines? Thread `t2` increases the counter to 1, so the second line should've been `Thread:t1, counter:1`, right?
+
+**NO**.
+
+In the example above, there is the possibility that both threads access the variable and increment it at the same time. It's called **race condition**. Because the thread scheduling algorithm can swap between threads at any time; we don't know the execution order of the threads, and we don't know when they will try to access the shared data. The result is; multiple threads *racing* to access and change the data.
+
+There are many ways to overcome this problem. Here I'll provide you two of them that I use the most.
+
+### Monitors
+
+In Java, synchronization is built around an internal entity of an object known as *intrinsic lock* or *monitor*. Every object has an intrinsic lock associated with it, and Java uses that to synchronize the object.
+
+If you want to prevent your threads from accessing the shared data at the same time, you can simply use the builtin synchronized keyword.
+
+```java
+private static class CounterThread extends Thread {
+    private static final Object lock = new Object();
+
+    public CounterThread(String name) {
+        super(name);
+    }
+
+    @Override
+    public void run() {
+        while (count < 10) {
+            synchronized (lock) {
+                System.out.printf("Thread:%s, counter:%d\\n", getName(), count);
+                count++;
+            }
+        }
+    }
+}
+```
+
+The lock object here acts as a physical lock. Whenever a thread accesses the synchronized code:
+
+- If the lock is unlocked, Java automatically locks it and allows the thread to run the code. When the thread finishes its job, Java automatically unlocks the lock.
+- If it's locked, thread just waits its turn.
+
+Here we used a simple `Object` as a lock, but Java provides more powerful locks in the `java.util.concurrent.locks` package. You can check them out if you want.
+
+We can also use the `synchronized` keyword on the method itself, like this:
+
+```java
+@Override
+synchronized public void run() {
+    while (count < 10) {
+        System.out.printf("Thread:%s, counter:%d\\n", getName(), count);
+        count++;
+    }
+}
+```
+
+But, **it won't work** with our case. Here is the output:
+
+```
+Thread:t1, counter:0
+Thread:t2, counter:0
+Thread:t2, counter:2
+Thread:t2, counter:3
+Thread:t2, counter:4
+Thread:t2, counter:5
+Thread:t2, counter:6
+Thread:t2, counter:7
+Thread:t2, counter:8
+Thread:t2, counter:9
+Thread:t1, counter:1
+```
+
+If we synchronize the method, Java uses the object's lock. But our threads have their own objects, and **have their own locks**. Here, they don't really do anything but locking and unlocking two separate locks without knowing about each other. It becomes the same thing as using no locks at all. It only would've worked if the threads were trying to access the same object.
+
+### Atomic Operations and Volatile Keyword
+
+An operation is *atomic*, (or *linearizable*, *indivisible*, *uninterruptible*) if it appears to the rest of the system to occur instantaneously. An atomic operation cannot stop in the middle: **it either happens completely, or it doesn't happen at all**. In other words, [side effects](http://softwareengineering.stackexchange.com/questions/40297/what-is-a-side-effect) of an atomic operation are not visible until it finishes.
+
+By default, [**Java guarantees that reading or writing a variable is an atomic operation**](https://docs.oracle.com/javase/tutorial/essential/concurrency/atomic.html), unless the variable is a long or double. If the variable is declared as volatile, reads and writes become atomic even if it's a `long` or `double`.
+
+So, why didn't our example `count++` work in the first place? The reason is `++` decomposes into 3 operations; reading, incrementing, and writing back. Even though they're atomic by themselves, it doesn't prevent a thread from reading the variable while the other thread is incrementing it. To overcome this problem, we can use the atomic implementation of the integer primitive: `AtomicInteger`. It provides atomic versions of some composite operations, such as `getAndIncrement()`, `incrementAndGet()` and `getAndSet(value)`.
+
+```java
+@Override
+public void run() {
+    while (count.get() < 10) {
+        System.out.printf("Thread:%s, counter:%d\\n", getName(), count.getAndIncrement());
+    }
+}
+```
+
+Here's the output:
+
+```
+Thread:t1, counter:0
+Thread:t2, counter:1
+Thread:t2, counter:3
+Thread:t2, counter:4
+Thread:t2, counter:5
+Thread:t2, counter:6
+Thread:t2, counter:7
+Thread:t2, counter:8
+Thread:t2, counter:9
+Thread:t1, counter:2
+```
+
+As you can see, even though both of them could enter the while loop, they couldn't increase the number at the same time. There are atomic implementations of many primitives. You can find them under the `java.util.concurrent.atomic` package.
+
+Next time I'll be talking about **semaphores**, which allows us to have (at most) N number of threads accessing the same shared state at the same time. Have a great day!
+
+</div>

@@ -1,0 +1,51 @@
+<div>
+
+Last time I've talked about [Lambda Expressions in Java 8](/posts/2016-05-15/lambdas-in-java-8 "Lambda Expressions in Java 8") and now it's time to talk about **streams**.
+
+Lambdas give us the ability to pass behavior by using functional interfaces, which removes the need for extra classes. They are already great; they make the code cleaner and more understandable, but they are greater if we make use of them while creating APIs. An example to such an API is the **Stream API** in _JDK 8_.
+
+We use streams to construct a pipeline of operations on a *Collection*. Let's take a look at a simple example.
+
+```java
+List l = Arrays.asList("A", "AB", "C", "D", "EFG");
+l.stream()
+ .map(s -> s.toLowerCase())
+ .filter(s -> s.contains("a"))
+ .sorted((s1, s2) -> s1.length() - s2.length())
+ .forEach(System.out::println);
+```
+
+* `stream()`: Creates a stream pipeline on the given collection, which is a `List` in this case.
+* `map(Function)`: Applies the given `Function` on all elements of this stream and returns a new stream. Lambda expression `s -> s.toLowerCase()` creates a `Function` to convert all elements to lower-case.
+* `filter(Predicate)`: Filters the stream by the given `Predicate` and returns a new stream. Lambda expression `s -> s.contains("a")` creates a `Predicate` to filter all elements which doesn't contain *'a'*.
+* `sorted(Comparator)`: Sorts all elements of this stream by the given `Comparator`. Lambda expression `(s1, s2) -> s1.length() - s2.length()` creates a `Comparator` to sort all elements by their length in ascending order.
+* `forEach(Consumer)`: Performs an action on all elements of this stream. This is a **terminal operation**, which means it doesn't return a stream. Lambda expression `System.out::println` creates a *Consumer* to print all elements line-by-line. This is exactly the same with writing `s -> System.out.println(s)`, just a shorter form.
+
+Stream operations can be performed sequentially or in parallel. **One thing to keep in mind is that stream is not a data structure, it is just _higher level abstraction_.** Streams do not store any data.
+
+Streams are **lazy**, means they are only computed when accessed. *Intermediate operations* like `map(Function)`, `filter(Predicate)`, `sorted(Comparator)` actually **_does nothing_** until the stream is accessed by a *terminal operation*, ie. `forEach(Consumer)` operation on the example shown above. This allows us to produce infinite streams of data.
+
+```java
+IntStream infiniteStream = IntStream.iterate(1, el -> el + 1)
+                              .filter(el -> el % 2 == 0);
+```
+
+Code shown above creates an infinite integer stream, and filters the odd ones. One might expect that when we execute this code, it will cause an infinite loop, eventually fill the whole memory and then crash. But since the streams are *lazy* and only evaluated when accessed, this code doesn't cause any problem. But if we add a terminal operation like this:
+
+```java
+List<Integer> infiniteStream = IntStream.iterate(1, el -> el + 1)
+                                  .filter(el -> el % 2 == 0)
+                                  .boxed()
+                                  .collect(Collectors.toList());
+```
+
+It *does* cause an infinite loop and the program eventually crashes with a beautiful exception: `Exception in thread "main" java.lang.OutOfMemoryError: Java heap space`.
+
+By the way, there are so many readily accessible intermediate operations you can use and I simply can't explain them all, but let me explain the ones I used above.
+
+* `boxed()`: Returns a new stream consisting all elements of this stream boxed to an `Integer`.
+* `collect(Collector)`: Collects all elements of this stream by using the given `Collector`. The one used above collects this stream to a `List`.
+
+This was a simple & quick guide and there is much more to learn. I strongly suggest you to dig into it and learn *creating streams from different data sources*, *parallel streams* etc. Next time I'll be looking at **interface default methods**. Have a good day!
+
+</div>

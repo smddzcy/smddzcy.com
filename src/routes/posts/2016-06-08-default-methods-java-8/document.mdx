@@ -1,0 +1,207 @@
+<div>
+
+Last time I've talked about [Streams in Java 8](/posts/2016-06-03/streams-in-java-8) and now it's time to talk about **interface default methods**.
+
+We all know that we should code to interfaces. Interfaces give the clients all they need, without giving any detail about its implementation at all. (Known as "[Loose coupling](https://en.wikipedia.org/wiki/Loose_coupling)") Because of this, designing clean and long-lasting interfaces is an important aspect of programming. But, what happens as our project & implementations grow and we need to add new behaviors to those interfaces ? Well, *default methods* to rescue.
+
+> Default methods enable you to add new functionality to the interfaces of your libraries and ensure binary compatibility with code written for older versions of those interfaces.
+
+That's what Java says on its [*official documentation*](https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html). Default methods are the methods you can include in interfaces with their *implementation details*. Let's continue with examples to understand it better.
+
+```java
+interface Person {
+    String getName();
+    int getAge();
+}
+```
+
+Let's say that you have this interface and there are millions of people out there using it and building on top of it. If default methods were not an option, when you add a new behavior, all of the classes built on top of it would have to implement this or *they wouldn't work*. With default methods, **you can easily expand your interfaces**. Let's add a new behavior to our interface, of course with its implementation.
+
+```java
+interface Person {
+    String getName();
+    int getAge();
+    default String getMessage() {
+        return "No message";
+    }
+}
+
+class Student implements Person {
+    private String name;
+    private int age;
+
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public int getAge() {
+        return age;
+    }
+}
+
+public class InterfaceDefaultMethods {
+    public static void main(String[] args) {
+        Student s = new Student("Bob", 19);
+        System.out.println(s.getMessage()); // "No message"
+    }
+}
+```
+
+That's it. Nothing is broken and everybody enjoys their new feature. Also they can change the behavior of that method too by overriding it.
+
+```java
+class Student implements Person {
+  
+    // ...
+
+    @Override
+    public String getMessage() {
+      return "Name: " + name + " - Age: " + age;
+    }
+}
+
+public class InterfaceDefaultMethods {
+    public static void main(String[] args) {
+        Student s = new Student("Bob", 19);
+        System.out.println(s.getMessage()); // "Name: Bob - Age: 19"
+    }
+}
+```
+
+## Conflicts with Multiple Interfaces
+
+Java always had *multiple inheritance of type*, but with Java 8 and default methods, now it has **_multiple inheritance of behavior_**. But along with all the goodness, that brings in some problems too.
+
+#### #1: Ambiguity in Default Methods with Same Signature
+
+Since classes can implement multiple interfaces, there could be a situation where 2 interfaces have a default method with the *same signature*. This causes a **_conflict_** and results in a compilation error since Java doesn't know what to do.
+
+```java
+interface Person {
+    String getName();
+    int getAge();
+    default String getMessage() {
+        return "No message";
+    }
+}
+
+interface Citizen {
+    default String getMessage() {
+        return "Citizen message";
+    }
+}
+
+class Student implements Person, Citizen {
+
+// ...
+
+}
+
+public class InterfaceDefaultMethods {
+    public static void main(String[] args) {
+        Student s = new Student("Samed", 19);
+        System.out.println(s.getMessage()); // Compilation error
+    }
+}
+```
+
+```
+Exception in thread "main" java.lang.Error: Unresolved compilation problem:
+    Duplicate default methods named getMessage with the parameters () and () are inherited from the types Citizen and Person
+```
+
+We can fix this problem by overriding the method, then choosing one of the implementations or implement our own.
+
+```java
+class Student implements Person, Citizen {
+
+    // ...
+
+    @Override
+    public String getMessage() {
+        return Citizen.super.getMessage(); // Choose Citizen's default method. Yes, "super" keyword is necessary.
+    // return Person.super.getMessage(); // Choose Person's default method
+    // return "Wow what a message"; // Or implement our own
+    }
+
+}
+
+public class InterfaceDefaultMethods {
+    public static void main(String[] args) {
+        Student s = new Student("Samed", 19);
+        System.out.println(s.getMessage()); // "Citizen message"
+    }
+}
+```
+
+#### #2: More Specific Interface Problem
+
+In the case where an interface is more specific than the other, Java *automatically chooses* its default method and **you can't bypass that by choosing the less specific interface's default method**.
+
+```java
+interface Citizen {
+    default String getMessage() {
+        return "Citizen message";
+    }
+}
+
+interface TurkCitizen extends Citizen {
+    default String getMessage() {
+        return "Turk citizen message";
+    }
+}
+
+class Student implements TurkCitizen, Citizen { }
+
+public class InterfaceDefaultMethods {
+    public static void main(String[] args) {
+        Student s = new Student();
+        System.out.println(s.getMessage()); // "Turk citizen message"
+    }
+```
+
+If you try to bypass this and choose `Citizen`s default method, that results in another beautiful *compilation error*.
+
+```java
+interface Citizen {
+    default String getMessage() {
+        return "Citizen message";
+    }
+}
+
+interface TurkCitizen extends Citizen {
+    default String getMessage() {
+        return "Turk citizen message";
+    }
+}
+
+class Student implements TurkCitizen, Citizen {
+    @Override
+    public String getMessage() {
+        return Citizen.super.getMessage();
+    }
+}
+
+public class InterfaceDefaultMethods {
+    public static void main(String[] args) {
+        Student s = new Student();
+        System.out.println(s.getMessage()); // Compilation error
+    }
+}
+```
+
+```
+Exception in thread "main" java.lang.Error: Unresolved compilation problem:
+    Illegal reference to super type Citizen, cannot bypass the more specific direct super type Java8.TurkCitizen
+```
+
+That's all. This was a simple & quick guide and I hope you've enjoyed it. Next time I’ll be looking at **optionals**. Have a good day !
+
+</div>

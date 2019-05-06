@@ -1,0 +1,200 @@
+import immutable from './immutable.png'
+import sideEffects from './side-effects.png'
+
+<div>
+
+For the last couple of weeks, I've been trying to learn some functional programming in my free time. For someone who's never written any functional code before (or, let's say, in any functional language before), I must say that it was a tough but fun experience.
+
+## First Impression
+
+I like the structure of Object-Oriented Programming (despite its verbosity), and I like the easiness of using mutable states. These are my tools for a small project. But sometimes, you don't need things to be easy, but you need them to be *reliable*.
+
+Reliability is the magic keyword of functional programming. It gives you (as far as I've seen so far) the most reliable code you can get. Whenever your code compiles, you can be sure that it'll work seamlessly and there won't be any unexpected results. Let me list you down a couple of reasons why I think that.
+
+---
+
+<img src={immutable} alt="Immutable" />
+
+## Immutability
+
+Immutability and pure functions are at the core of functional programming. For the ones who doesn't know: A *pure function* is a function that always returns the same thing when you give it the same input. These two concepts make the code incredibly expressive and easy to reason about.
+
+Think about a function that doubles a number and adds a predefined number to it. Here is a (broken) implementation in C.
+
+```c
+int x;
+
+int doubleAndAdd10(int n) {
+  x = 10;
+  return n * 2 + x;
+}
+
+int main(int argc, char const *argv[]) {
+  x = 15;
+
+  int num = doubleAndAdd10(5);
+  num += x;
+
+  printf("%d\n", num);
+  return 0;
+}
+```
+
+By only looking at the main function, I expect this program to print 35. But when I run it, I get 30. Although it is the worst code piece I've ever written, it shows the main point clearly.
+
+Mutability starts to become a real problem as your program grows. It makes the code harder to track and reason about. But I don't think that it is the *real evil* as others might think. An extreme case of mutability is *global mutable state*, the one used in the example above, which I think is the real evil.
+
+Here is the same code in Haskell.
+
+```haskell
+doubleAndAdd10 :: (Num a) => a -> a
+doubleAndAdd10 num = num * 2 + 10
+
+main = print $ doubleAndAdd10 5 + x
+  where x = 15
+```
+
+It is not only unbreakable; but simpler to write, and easier to read and understand.
+
+---
+
+<img src={sideEffects} alt="Side effects - XKCD" />
+
+
+## Side Effects
+
+Most of the bugs come from the code pieces that do more than they supposed to do, and that "more" is usually a *side effect*.
+
+Side effect means a function modifies the state of something outside of its scope. This might be an AJAX request, printing to console, mutating a global variable (like in the example above - it was the reason of the bug) or whatever you might do to interact with the outside world.
+
+Side effects are one of the forbidden things in functional programming. When we want our code to be reliable, the first thing we should do is to limit them. The beautiful expressiveness of functional languages lets us know where side effects occur, but this is not enough by itself. We should encapsulate them in small independent functions, and use only those functions to get the desired effect. This way we can be sure about the exact behavior and where it comes from. It's easier to track down and easier to fix or update.
+
+Assume we have a `Person` type which has `name` and `age`, and we want to be able to log a `Person` to console as a string. This is how you write it in JavaScript.
+
+```js
+class Person {
+  constructor(name, age) {
+    this.state = {
+      name: name,
+      age: age
+    }
+  }
+
+  get name() {
+    return this.state.name
+  }
+
+  set name(name) {
+    this.state.name = name
+  }
+
+  get age() {
+    return this.state.age
+  }
+
+  set age(age) {
+    this.state.age = age
+  }
+}
+
+const logPerson = function(person) {
+  if (typeof person !== 'object' || person.constructor !== Person) {
+    throw new TypeError(`You gave "${typeof person}", it must be a "Person".`)
+  }
+  console.log(`${person.name} ${person.age}`)
+}
+```
+
+This is a lot of code for a very simple task. But being a lot doesn't make this a quality code, and obviously not a reliable one.
+
+We monkey check the type of our input. We make use of mutable states (which is not that bad IMO, since we track the state changes with getters and setters). And the worst thing is, without reading this code, no one can be sure that this function doesn't change an outside state. There is no guarantee that someone won't change that `console.log` to another side-effect some day. Moreover, this code is not expressive enough. The other guy who comes after you will have to read all the code to understand what it does. (Or all the comments you wrote, which is more of less the same thing)
+
+Here comes the functional language. This is the same code in PureScript.
+
+```haskell
+data Person = Person { name :: String, age :: Int }
+
+logPerson :: forall t. Person -> Eff ( "console" :: CONSOLE | t ) Unit
+logPerson (Person p) = log $ p.name <> " " <> show p.age
+```
+
+These 3 lines have everything that our 31 line JavaScript code does not. It has compile-time type check, and it clearly states that it gets a `Person` as an input and does a `CONSOLE` effect.
+
+You'll have a very hard time understanding if you're seeing this for the first time, but don't worry. It gets only simpler with practice, and actually, it becomes one of the easiest pieces of code to read and understand. (If you want to learn more about PureScript, take a look at http://leanpub.com/purescript/read)
+
+## Composition
+
+This is one of the biggest differences if you are coming from an object-oriented world. Inheritance is *top-down*, which means you create a general superclass and specialize it as you go down. Sometimes this approach works well, but it becomes very hard to maintain and add new functionalities as your system grows. You start to create more and more general classes to cover all the cases.
+
+Functional programming works with the *bottom-up* approach. You start with very simple and tiny functions that do only one thing, and you build on top of them by composing them. It's easier, and unlike object-oriented programming,  it feels very natural to start with something small and end up with something big.
+
+## Compactness
+
+By composing smaller blocks and making great use of algebraic structures, functional programming pushes you to write very dense and compact code. It feels very hard at first sight, but as I've said, it gets only easier.
+
+Let me give you another basic example, quicksort. This is the implementation in Java.
+
+```java
+public static void quickSort(int[] arr, int s, int e) {
+    if (s >= e) {
+        return;
+    }
+    int m = (s + e) / 2;
+    int pivot = arr[m];
+
+    int l = s;
+    int r = e;
+    while (l <= r) {
+        while(arr[l] < pivot) l++;
+        while(arr[r] > pivot) r--;
+        if (l <= r) {
+            swap(arr, l++, r--);
+        }
+    }
+    quickSort(arr, s, r);
+    quickSort(arr, l, e);
+}
+
+public static void swap(int[] arr, int i, int j) {
+    int t = arr[i];
+    arr[i] = arr[j];
+    arr[j] = t;
+}
+```
+
+There are many other implementations, including a functional one which is a little bit shorter, but it's the overall look of it. Here is the same code in Haskell.
+
+```haskell
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) = smaller ++ [x] ++ bigger
+    where smaller = quicksort $ filter (<= x) xs
+          bigger  = quicksort $ filter (> x) xs
+```
+
+There are no ambiguous variables, mutable structures, and even need for comments. I think it needs no other explanation.
+
+---
+
+## Want More?
+
+There are great articles on functional programming. If you're planning to try a functional language, I'd advise you to read some of the articles before. If you're like me, who likes to dive into the language directly, experiment with it and learn it while using it, please don't try that here. It'll be very hard. Just learn the basic concepts and the vocabulary before. You'll thank me later.
+
+Here are some articles for further reading:
+- [https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming](https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming)
+- [http://worrydream.com/refs/Hughes-WhyFunctionalProgrammingMatters.pdf](http://worrydream.com/refs/Hughes-WhyFunctionalProgrammingMatters.pdf)
+- [http://c2.com/cgi/wiki?AdvantagesOfFunctionalProgramming](http://c2.com/cgi/wiki?AdvantagesOfFunctionalProgramming)
+- [http://www.ibm.com/developerworks/library/j-ft20/](http://www.ibm.com/developerworks/library/j-ft20/)
+
+More resources for JavaScript: [https://github.com/stoeffel/awesome-fp-js](https://github.com/stoeffel/awesome-fp-js)
+
+Here are some functional languages that might better introduce you depending on your current language choice:
+
+- Java: [Scala](http://www.scala-lang.org/), [Clojure](http://clojure.org/) (JVM languages).
+- JavaScript: [PureScript](http://www.purescript.org/), [Elm](http://elm-lang.org/), [ClojureScript](http://himera.herokuapp.com/index.html).
+- Ruby: [Elixir](http://elixir-lang.org/).
+- Ruby on Rails: [Phoenix](http://www.phoenixframework.org/).
+- C, C++: [Rust](https://www.rust-lang.org/).
+- Others: [Haskell](http://haskell.org/), [Agda](http://wiki.portal.chalmers.se/agda/pmwiki.php), [Idris](http://www.idris-lang.org/).
+
+</div>
