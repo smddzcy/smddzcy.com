@@ -101,8 +101,8 @@ const routes = compose(
     // up.
     '/rss': route(),
 
-    '/:unknown': route({
-      title: 'Not Found',
+    '/404': route({
+      title: 'Page not found',
       view: import('../components/NotFoundPage'),
     }),
   }),

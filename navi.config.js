@@ -12,5 +12,9 @@ export function getPagePathname({ url }) {
   if (url.pathname === '/') {
     return 'index.html';
   }
+  // Github pages to automatically redirect 404 errors to 404.html
+  if (url.pathname === '/404') {
+    return '404.html';
+  }
   return path.join(url.pathname.slice(1), 'index.html');
 }
