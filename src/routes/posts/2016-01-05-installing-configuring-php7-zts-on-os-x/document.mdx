@@ -1,0 +1,108 @@
+<div>
+
+There are two ways to build PHP. First way is the simplest and no-mess way, using **Homebrew** - or any equivalent _package manager_ depending on your system. If you are not already familiar with package managers, I strongly suggest you to be.  They make lives easier for sure. The second way is the slow & messy way; building it from scratch without any package manager. It may be slow and messy but actually, it gives you more options while building. This is my way of installing PHP on my servers, but on my personal computer; since I don't have any deep specific requirements - and for simplicity too - I'll be using and talking about the Homebrew way. I'll publish a tutorial about this too, but now let's start.
+
+Installing
+----------
+
+First, update the Homebrew and get the required formulas - _formulas_ are just packages, like those in aptitude. If you don't have Homebrew yet, visit this page for installation and detailed usage: [http://brew.sh](http://brew.sh)
+
+```bash
+brew update && brew tap homebrew/php
+```
+
+See which versions of PHP we can have.
+
+```bash
+brew search php
+```
+
+There will be a long list. If you see something like "**homebrew/php/php70**" then it's OK. Now let's look at the options we have.
+
+```bash
+brew options php70
+```
+
+You can use any of these options while installing PHP, but do not forget to include `--with-thread-safety`, it is essential for threading extensions. Now start the installation
+
+```bash
+brew install php70 --with-thread-safety --with-homebrew-curl
+```
+
+After some time - brace yourself, it might take a little long - depending on your internet and Mac's speed, installation finishes. Now install some extensions. My recommendations are here but you can find all the extensions by `brew search php70-`
+
+```bash
+brew install php70-opcache php70-mcrypt php70-pthreads php70-xdebug --build-from-source
+brew install php70-memcached --build-from-source --HEAD
+```
+
+Installation is done, let's continue with configuration.
+
+Configuring
+-----------
+
+I start by adding PHP support in Apache. First you have to find the path to your httpd.conf file: (mostly it'll be `/private/etc/apache2/httpd.conf`)
+
+```bash
+httpd -V | grep SERVER\_CONFIG\_FILE
+```
+
+Open the file with a text editor, also with privileges otherwise you can't make changes - use `sudo` for example.
+
+```bash
+sudo nano PATH-TO-YOUR-CONFIG
+```
+
+Add these at the end of the file
+
+```
+LoadModule php7_module /usr/local/opt/php70/libexec/apache2/libphp7.so
+
+<FilesMatch .php$>
+    SetHandler application/x-httpd-php
+</FilesMatch>
+```
+
+Then find this line
+
+```
+DirectoryIndex index.html
+```
+
+and change with:
+
+```
+DirectoryIndex index.php index.html
+```
+
+You can close the config file. Now let's set up the `php.ini`. First make a link to the new `php.ini` file
+
+```bash
+sudo mv /etc/php.ini /etc/php.ini_old
+sudo ln -s /usr/local/etc/php/7.0/php.ini /etc/php.ini
+```
+
+`/etc` is the path to my .ini file. You can see yours by running:
+
+```bash
+php --ini
+```
+
+Then this file needs some configuration too. Find `;date.timezone =` and set your timezone. Mine is:
+
+```
+date.timezone = "Europe/Istanbul"
+```
+
+Find `;opcache.enable `, `;opcache.enable_cli` and set them both to `1`, also delete the `;` (_semicolon_) prefixes. For detailed opcache settings, visit this page: [https://www.scalingphpbook.com/best-zend-opcache-settings-tuning-config/](https://www.scalingphpbook.com/best-zend-opcache-settings-tuning-config/)
+
+There are tons of options in the `php.ini` and `httpd.conf`, I can't include them all here but I suggest you to make some research and find the best options that suit your case. After these, it should be all set. Open a new terminal window, fire up your server and check the PHP version. You can also see your installed extensions by running `php -m`.
+
+```bash
+sudo httpd -k restart
+php -v
+```
+
+[![php-7-version](http://localhost/smddzcy.com/wp-content/uploads/2016/01/php-7-version.png)](http://localhost/smddzcy.com/wp-content/uploads/2016/01/php-7-version.png) My next post will be about using **pThreads**.If you have questions or recommendations about PHP 7 , please let me know.
+
+</div>

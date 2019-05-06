@@ -1,0 +1,104 @@
+<div>
+
+Almost a year ago, I came across with this **pThreads** extension. It's an extension that makes it possible to create multi-threaded applications in PHP, and I completely fell in love with it! It is not some bullshit like forks; it gives you the ability to use real POSIX threads.
+
+> Absolutely, this is not a hack, we _don't_ use forking or any other such nonsense, what you create are honest to goodness POSIX threads that are completely compatible with PHP and safe ... this is true multi-threading :)
+
+As I said before, you'll be amazed by its speed and easy-to-use structure. Let's start.
+
+Installing
+----------
+
+It's a PECL extension. If you have PECL, you can install directly with it.
+
+```bash
+pecl install pthreads
+```
+
+Or you can install via Homebrew on macOS.
+
+```bash
+brew install php70-pthreads
+```
+
+After installation, check the output of `php -m`. You probably won't see pThreads there, which means you should add its extension declaration to your `php.ini` to enable it. You have to add something like `extension="PATH-TO-EXTENSION-FILE/pthreads.so or .dll"` and restart your server. If your server fails to start - which is normal - look for the error it gives. It will say something like this for Apache:
+
+```
+PHP Fatal error: The apache2handler SAPI is not supported by pthreads
+PHP Fatal error: Unable to start pthreads module in Unknown on line 0 Unknown(0) : Fatal error - The apache2handler SAPI is not supported by pthreads Unknown(0) : Fatal error - Unable to start pthreads module
+```
+
+It's because pThreads only works on the CLI side with the recent versions, and you have to disable it for your web server. Make a copy of your php.ini file in the same directory with the default one, name it `php-cli.ini`, then delete the `extension="PATH-TO-EXTENSION-FILE/pthreads.so or .dll"` declaration from the default `php.ini` file. Try to start your server again; now there shouldn't be any problem.
+
+Usage
+-----
+
+Let's look at this simple example.
+
+```php
+<php
+
+class SomeThreadedClass extends Thread
+{
+    private $tID;
+    public $data;
+
+    public function __construct(int $tID)
+    {
+        $this->tID = $tID;
+        $this->data = $tID . ":" . date('H:i:s');
+    }
+
+    public function run()
+    {
+        echo $this->tID . " started.\n";
+        sleep($this->tID);
+        echo $this->tID . " ended. " . date('H:i:s') . "\n";
+    }
+}
+
+$threads = [];
+
+for ($i = 1; $i < 5; $i++) {
+    $threads[$i] = new SomeThreadedClass($i);
+    $threads[$i]->start();          // start the job on the background
+}
+
+for ($i = 1; $i < 5; $i++) {
+    $threads[$i]->join();           // wait until job is finished, 
+    echo $threads[$i]->data . "\n"; // then we can access the data
+}
+```
+
+Create a class that extends `Thread`, and override the `run` method. It's simply all it takes to get a threaded PHP object.
+
+```php
+$threads[$i]->start();
+```
+
+This line, the start method, initiates the thread and starts executing your object's run method.
+
+```php
+$threads[$i]->join();
+```
+
+When your thread finishes its task, you can reach to your object after calling the join method. Output of the code above:
+
+```
+1 started.
+2 started.
+3 started.
+4 started.
+1 ended. 18:18:52
+1:18:18:51
+2 ended. 18:18:53
+2:18:18:51
+3 ended. 18:18:54
+3:18:18:51
+4 ended. 18:18:55
+4:18:18:51
+```
+
+It looks totally satisfying, doesn't it ? I suggest you to take a look at its documentation & great examples on its [GitHub page](https://github.com/krakjoe/pthreads). There is also a php.net documentation: [http://php.net/manual/en/book.pthreads.php](http://php.net/manual/en/book.pthreads.php)
+
+</div>
