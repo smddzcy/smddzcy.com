@@ -14,7 +14,7 @@ function Bio(props) {
           software engineer, web enthusiast. shares articles, tutorials and his thoughts on various things.
         </div>
         <div>
-          <a href="https://linkedin.com/in/smddzcy" title="LinkedIn" rel="nofollow noopener noreferrer" target="_blank" style={{ margin: '0 5px' }}>LinkedIn</a>
+          <a href="https://linkedin.com/in/smddzcy" title="LinkedIn" rel="nofollow noopener noreferrer" target="_blank" style={{ marginRight: 5 }}>LinkedIn</a>
           &bull;
           <a href="https://github.com/smddzcy" title="GitHub" rel="nofollow noopener noreferrer" target="_blank" style={{ margin: '0 5px' }}>GitHub</a>
           &bull;

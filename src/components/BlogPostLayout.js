@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Link, useCurrentRoute } from 'react-navi';
 import { MDXProvider } from '@mdx-js/tag';
-import Disqus from 'disqus-react';
+import { DiscussionEmbed } from 'disqus-react';
 import siteMetadata from '../siteMetadata';
 import ArticleMeta from './ArticleMeta';
 import Bio from './Bio';
@@ -49,7 +49,7 @@ function BlogPostLayout({ blogRoot }) {
             <MDXComponent />
           </MDXProvider>
           <div style={{ marginTop: '3rem' }}>
-            <Disqus.DiscussionEmbed shortname="smddzcy" config={disqusConfig} />
+            <DiscussionEmbed shortname="smddzcy" config={disqusConfig} />
           </div>
           <footer className={styles.footer}>
             <h3 className={styles.title}>
