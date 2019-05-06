@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{139:function(n,t,o){"use strict";o.r(t),t.default={title:"Thread Synchronization in Java - Monitors and Atomic Operations",tags:["java","concurrency","multi-threading","thread synchronization","threads"],spoiler:"If you ever worked with threads, you know that thread synchronization is a serious topic. Today I'm going to talk about the ways in Java.",getContent:function(){return o.e(20).then(o.bind(null,124))}}}}]);
+//# sourceMappingURL=9.245440cf.chunk.js.map
