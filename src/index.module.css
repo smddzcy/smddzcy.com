@@ -56,3 +56,11 @@
 :global img {
   max-width: 100%;
 }
+
+:global #disqus_thread {
+  overflow: hidden;
+}
+
+:global #disqus_thread iframe {
+  margin-bottom: -54px !important;
+}

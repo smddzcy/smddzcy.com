@@ -10,7 +10,7 @@ import styles from './BlogPostLayout.module.css';
 function BlogPostLayout({ blogRoot }) {
   const { title, data, url } = useCurrentRoute();
   const disqusConfig = {
-    url: url.href,
+    url: `https://smddzcy.com${url.href}`,
     identifier: data.slug,
     title,
   };
@@ -48,7 +48,9 @@ function BlogPostLayout({ blogRoot }) {
           >
             <MDXComponent />
           </MDXProvider>
-          <Disqus.DiscussionEmbed shortname="smddzcy" config={disqusConfig} />
+          <div style={{ marginTop: '3rem' }}>
+            <Disqus.DiscussionEmbed shortname="smddzcy" config={disqusConfig} />
+          </div>
           <footer className={styles.footer}>
             <h3 className={styles.title}>
               <Link href={blogRoot}>
