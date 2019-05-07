@@ -4,7 +4,7 @@
         <title>smddzcy | yet another dev</title>
         <link>/</link>
         <description>yet another dev. software engineer, web enthusiast. shares articles, tutorials and his thoughts on various things.</description>
-        <lastBuildDate>Tue, 07 May 2019 00:26:42 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 07 May 2019 00:28:43 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <item>
@@ -697,7 +697,7 @@ engravingMaterial<span class="token punctuation">.</span>transparent <span class
   mainObject<span class="token punctuation">.</span>children<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>material <span class="token operator">=</span> engravingMaterial<span class="token punctuation">;</span>
   mainObject<span class="token punctuation">.</span>children<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>material<span class="token punctuation">.</span>needsUpdate <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><p>Voila. And you should see your text engraved on the object.</p><img src="/static/media/3d-test.d6f4858e.png" alt="" style="margin-bottom:1.5rem"/><p>It was really satisfying to see this result.</p><p>You can let me know if you have any issues or questions using the comment box below.</p></div></div>]]></content:encoded>
+</code></pre><p>Voila. And you should see your text engraved on the object.</p><img src="/static/media/3d-test.d6f4858e.png" alt="" style="margin-bottom:1.5rem"/><p>You can let me know if you have any issues or questions using the comment box below.</p></div></div>]]></content:encoded>
         </item>
     </channel>
 </rss>
