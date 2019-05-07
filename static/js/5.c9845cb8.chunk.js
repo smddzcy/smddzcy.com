@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{136:function(a,n,e){"use strict";e.r(n),n.default={title:"Lambda Expressions in Java 8",tags:["java","java8","tutorial","lambda","stream api","functional programming"],spoiler:"A big\xa0step was taken in\xa0Java 8 to a more functional & less verbose programming language. One of the most important features of Java 8\xa0is lambda expressions.",getContent:function(){return e.e(16).then(e.bind(null,119))}}}}]);
-//# sourceMappingURL=5.c9845cb8.chunk.js.map
