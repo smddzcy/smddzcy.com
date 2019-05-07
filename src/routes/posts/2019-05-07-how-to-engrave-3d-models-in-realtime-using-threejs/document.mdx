@@ -82,7 +82,7 @@ new THREE.MTLLoader()
             .load('obj.obj', function (object) {
               mainObject = object;
               // replace the dummy material with our custom engraving material
-              mainObject.children[1].material = backMaterial;
+              mainObject.children[1].material = engravingMaterial;
               mainObject.children[1].material.needsUpdate = true;
               ...
             });
