@@ -4,7 +4,7 @@
         <title>smddzcy | yet another dev</title>
         <link>/</link>
         <description>yet another dev. software engineer, web enthusiast. shares articles, tutorials and his thoughts on various things.</description>
-        <lastBuildDate>Tue, 07 May 2019 00:28:43 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 07 May 2019 00:29:22 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <item>
@@ -675,7 +675,7 @@ engravingMaterial<span class="token punctuation">.</span>transparent <span class
             <span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token string">'obj.obj'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">object</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
               mainObject <span class="token operator">=</span> object<span class="token punctuation">;</span>
               <span class="token comment">// replace the dummy material with our custom engraving material</span>
-              mainObject<span class="token punctuation">.</span>children<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>material <span class="token operator">=</span> backMaterial<span class="token punctuation">;</span>
+              mainObject<span class="token punctuation">.</span>children<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>material <span class="token operator">=</span> engravingMaterial<span class="token punctuation">;</span>
               mainObject<span class="token punctuation">.</span>children<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>material<span class="token punctuation">.</span>needsUpdate <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
               <span class="token operator">...</span>
             <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
