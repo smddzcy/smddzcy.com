@@ -11,6 +11,8 @@ function Bio(props) {
       <img src="https://pbs.twimg.com/profile_images/781276128673689600/tGOdd3qK_400x400.jpg" alt="Me" />
       <div>
         <div>
+          personal blog of <a href="https://twitter.com/smddzcy" title="Twitter" rel="nofollow noopener noreferrer" target="_blank">Samed Düzçay</a>.
+          <br />
           software engineer, web enthusiast. shares articles, tutorials and his thoughts on various things.
         </div>
         <div>
