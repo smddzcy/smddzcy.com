@@ -46,6 +46,9 @@ function BlogIndexPage({
           <Link href="./about">
             About
           </Link> &bull;{' '}
+          <Link href="./travel-map">
+            Travel Map
+          </Link> &bull;{' '}
           <Link href="./tags">
             Tags
           </Link>
