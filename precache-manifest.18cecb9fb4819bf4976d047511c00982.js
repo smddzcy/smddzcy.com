@@ -124,8 +124,8 @@ self.__precacheManifest = [
     "url": "/static/js/26.5efab3ad.chunk.js"
   },
   {
-    "revision": "fbe0e2e6251cdcf3dd3b",
-    "url": "/static/js/27.fbe0e2e6.chunk.js"
+    "revision": "fb21620ed785ddaa7145",
+    "url": "/static/js/27.fb21620e.chunk.js"
   },
   {
     "revision": "99536faca4919d09ddce",
@@ -136,8 +136,8 @@ self.__precacheManifest = [
     "url": "/static/js/29.7be75133.chunk.js"
   },
   {
-    "revision": "fbf45cb43dd76097195b",
-    "url": "/static/js/runtime~main.fbf45cb4.js"
+    "revision": "2780e52f6f6114243b9c",
+    "url": "/static/js/runtime~main.2780e52f.js"
   },
   {
     "revision": "d3740d48e9a4d64bc9a8ff624e55585c",
@@ -184,7 +184,7 @@ self.__precacheManifest = [
     "url": "/static/media/azure-webapp.7d59f165.png"
   },
   {
-    "revision": "7f5e640d7e923c4e1d5d5dcbe32c1b20",
+    "revision": "e2e6d44ed2eea2a8b60f6ac62a400f89",
     "url": "/index.html"
   }
 ];
