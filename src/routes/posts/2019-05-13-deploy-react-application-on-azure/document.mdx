@@ -8,7 +8,7 @@ Building React apps are super easy now - thanks to tools like `create-react-app`
 
 Nowadays, building a React app has become super easy. You don't have to deal with hundreds of lines of Webpack configuration. You don't have to think about how to optimize your CSS/JS/images, or your chunks, or anything else. The team behind `create-react-app` or other tools like [Next.js](https://nextjs.org/) or [Gatsby](https://www.gatsbyjs.org/) takes care of all of those things for you.
 
-I usually use `create-react-app` since I don't use fancy new stuff like CSS-in-JS (how do you handle caching with this?) or Server-side Rendering (SSR), so I'm going to use that here as well. First create your app:
+I usually use `create-react-app` since I don't use fancy new stuff like CSS-in-JS (how do you handle caching with this?) or Server-side Rendering (SSR), so I'm going to use that here as well. First, create your app:
 
 ```bash
 create-react-app NewAzureApp
@@ -80,7 +80,7 @@ node app.js
 
 ## Deploying Your Application on Azure
 
-First, you have to create a file called `web.config` to tell Azure how to run application. Here's my `web.config` that includes the configuration for Node + React + socket.io (I use it quite often).
+First, you have to create a file called `web.config` to tell Azure how to run your application. Here's my `web.config` that includes the configuration for Node + React + socket.io (I use it quite often).
 
 ```xml
 <!-- web.config -->
@@ -142,7 +142,7 @@ You have 2 options to deploy your app on Azure:
 
 I'm not going to explain the FTP option because it's pretty straightforward: just upload your whole application using any FTP client to the given server.
 
-For Azure Pipelines (my preferred way), you have to create a `azure-pipelines.yml` at the project root. It's a file that basically tells Azure how to build your application:
+For Azure Pipelines (my preferred way), you have to create an `azure-pipelines.yml` at the project root. It's a file that basically tells Azure how to build your application:
 
 ```yaml
 resources:
