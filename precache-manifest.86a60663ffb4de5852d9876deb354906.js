@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "540d828c113f7091e160",
+    "revision": "702293890cdc0dda6972",
     "url": "/static/css/main.50c53acf.chunk.css"
   },
   {
-    "revision": "540d828c113f7091e160",
-    "url": "/static/js/main.540d828c.chunk.js"
+    "revision": "702293890cdc0dda6972",
+    "url": "/static/js/main.70229389.chunk.js"
   },
   {
     "revision": "13641dd62c5753081891",
@@ -64,8 +64,8 @@ self.__precacheManifest = [
     "url": "/static/js/13.6c746bf8.chunk.js"
   },
   {
-    "revision": "1404ae1674aeac9bb4f9",
-    "url": "/static/js/14.1404ae16.chunk.js"
+    "revision": "492a0d1615f1be307651",
+    "url": "/static/js/14.492a0d16.chunk.js"
   },
   {
     "revision": "db4dd887c20c32a24e73",
@@ -136,8 +136,8 @@ self.__precacheManifest = [
     "url": "/static/js/29.7be75133.chunk.js"
   },
   {
-    "revision": "2780e52f6f6114243b9c",
-    "url": "/static/js/runtime~main.2780e52f.js"
+    "revision": "f8d6ec48ae7ad3ca6e78",
+    "url": "/static/js/runtime~main.f8d6ec48.js"
   },
   {
     "revision": "d3740d48e9a4d64bc9a8ff624e55585c",
@@ -184,7 +184,7 @@ self.__precacheManifest = [
     "url": "/static/media/azure-webapp.7d59f165.png"
   },
   {
-    "revision": "e2e6d44ed2eea2a8b60f6ac62a400f89",
+    "revision": "f4ddf246432a59f826016a8dc19392d6",
     "url": "/index.html"
   }
 ];
