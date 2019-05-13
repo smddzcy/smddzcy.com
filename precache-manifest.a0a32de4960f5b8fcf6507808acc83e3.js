@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "702293890cdc0dda6972",
-    "url": "/static/css/main.50c53acf.chunk.css"
+    "revision": "faf97013a7b02ac1ece0",
+    "url": "/static/css/main.19cb9a36.chunk.css"
   },
   {
-    "revision": "702293890cdc0dda6972",
-    "url": "/static/js/main.70229389.chunk.js"
+    "revision": "faf97013a7b02ac1ece0",
+    "url": "/static/js/main.faf97013.chunk.js"
   },
   {
     "revision": "13641dd62c5753081891",
@@ -116,8 +116,8 @@ self.__precacheManifest = [
     "url": "/static/js/24.e2ac1d6c.chunk.js"
   },
   {
-    "revision": "d3a46bef3bd66039a65e",
-    "url": "/static/js/25.d3a46bef.chunk.js"
+    "revision": "ffa21eb43d1cc40839ae",
+    "url": "/static/js/25.ffa21eb4.chunk.js"
   },
   {
     "revision": "5efab3ad6b84048b6abf",
@@ -136,8 +136,8 @@ self.__precacheManifest = [
     "url": "/static/js/29.7be75133.chunk.js"
   },
   {
-    "revision": "f8d6ec48ae7ad3ca6e78",
-    "url": "/static/js/runtime~main.f8d6ec48.js"
+    "revision": "b409cf942016873da144",
+    "url": "/static/js/runtime~main.b409cf94.js"
   },
   {
     "revision": "d3740d48e9a4d64bc9a8ff624e55585c",
@@ -184,7 +184,7 @@ self.__precacheManifest = [
     "url": "/static/media/azure-webapp.7d59f165.png"
   },
   {
-    "revision": "f4ddf246432a59f826016a8dc19392d6",
+    "revision": "b0449bf7a4ff86d58ab8195d8f609b4e",
     "url": "/index.html"
   }
 ];
