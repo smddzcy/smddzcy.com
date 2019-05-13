@@ -15,7 +15,7 @@ Today is the day. After receiving tons of emails from Jetpack and seeing my serv
   <figcaption><em>"Your server is not responding."</em></figcaption>
 </figure>
 
-These are basically what I received from Jetpack over and over again. It was totally expected though. My server has the cheapest configuration from DigitalOcean (1 CPU, 512 MB memory) and I host all of my applications on this weak little fella. One of those applications is [BOUN Course Planner](http://localhost/smddzcy.com/BounCoursePlanner/), which was extremely popular for the last couple of weeks because of the online registration period. It attracted **2000 people per day**, but my little server couldn't handle that much traffic. Specifically, it couldn't handle **more than ~30 active connections**.
+These are basically what I received from Jetpack over and over again. It was totally expected though. My server has the cheapest configuration from DigitalOcean (1 CPU, 512 MB memory) and I host all of my applications on this weak little fella. One of those applications is BOUN Course Planner, which was extremely popular for the last couple of weeks because of the online registration period. It attracted **2000 people per day**, but my little server couldn't handle that much traffic. Specifically, it couldn't handle **more than ~30 active connections**.
 
 I made a small load test and noticed that the Apache processes consume all the memory when there are multiple active connections. The source of the problem was obvious: Apache PHP module, a.k.a. `mod_php`. It is the module that allows Apache to interpret PHP files, and it's known to suffer from this kind of memory problems.
 
