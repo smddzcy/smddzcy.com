@@ -1,0 +1,181 @@
+import azureWebapp from './azure-webapp.png'
+
+<div>
+
+Building React apps are super easy now - thanks to tools like `create-react-app`, but deploying them can still be tricky depending on the platform. I usually use PaaS solutions like [Netlify](https://www.netlify.com/) or [Heroku](https://www.heroku.com/) to easily deploy my PoC applications with a single command, and use AWS to deploy my production applications. But I was forced to use Azure for my last few projects and it was a bit tricky to use. I'm gonna share **how to deploy a Node + React application on Microsoft Azure** today.
+
+## Building a React Application
+
+Nowadays, building a React app has become super easy. You don't have to deal with hundreds of lines of Webpack configuration. You don't have to think about how to optimize your CSS/JS/images, or your chunks, or anything else. The team behind `create-react-app` or other tools like [Next.js](https://nextjs.org/) or [Gatsby](https://www.gatsbyjs.org/) takes care of all of those things for you.
+
+I usually use `create-react-app` since I don't use fancy new stuff like CSS-in-JS (how do you handle caching with this?) or Server-side Rendering (SSR), so I'm going to use that here as well. First create your app:
+
+```bash
+create-react-app NewAzureApp
+```
+
+We're going to let Node serve both our React application and the backend API, so let's add the dependencies for a basic Node API:
+
+```bash
+cd NewAzureApp
+yarn add express body-parser cors helmet morgan
+```
+
+Create a file called `app.js` at the project root:
+
+```bash
+touch app.js
+```
+
+Then implement a basic API:
+
+```js
+// app.js
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const helmet = require('helmet');
+const bodyParser = require('body-parser');
+const logger = require('morgan');
+
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+  if (Number.isNaN(port)) { return val; }
+  if (port >= 0) { return port; }
+  return false;
+}
+
+const app = express();
+
+app.use(cors({ credentials: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(helmet());
+app.use(logger('dev'));
+
+// Add your API routes under the route `/api`
+const api = require('./api');
+app.use('/api', api);
+
+// Serve the React application
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+const port = normalizePort(process.env.PORT || 3000);
+app.listen(port, () => {
+  console.log(`API listening on port: ${port}`);
+});
+```
+
+Now when you build your React application and run `app.js`, it will automatically serve your app + API together:
+
+```bash
+yarn build
+node app.js
+# go to localhost:3000 to see your React app
+# you can also access your API endpoints from localhost:3000/api
+```
+
+## Deploying Your Application on Azure
+
+First, you have to create a file called `web.config` to tell Azure how to run application. Here's my `web.config` that includes the configuration for Node + React + socket.io (I use it quite often).
+
+```xml
+<!-- web.config -->
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+ <system.webServer>
+ <webSocket enabled="false" />
+ <handlers>
+    <add name="iisnode" path="app.js" verb="*" modules="iisnode"/>
+  </handlers>
+ <rewrite>
+  <rules>
+    <rule name="StaticContent">
+      <action type="Rewrite" url="build{PATH_INFO}" />
+    </rule>
+    <rule name="DynamicContent">
+      <match url="/api/*" />
+      <action type="Rewrite" url="app.js"/>
+    </rule>
+    <rule name="Socket.io polling">
+      <match url="/socket.io/*" />
+      <action type="Rewrite" url="app.js"/>
+    </rule>
+    <rule name="Socket.io websocket">
+      <match url="/sockjs-node/*" />
+      <action type="Rewrite" url="app.js"/>
+    </rule>
+    <rule name="React Routes">
+      <match url=".*" />
+      <conditions logicalGrouping="MatchAll">
+        <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="True"/>
+        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="True"/>
+        <add input="{REQUEST_URI}" pattern="/api" negate="true" />
+      </conditions>
+      <action type="Rewrite" url="build/" />
+    </rule>
+  </rules>
+ </rewrite>
+ <security>
+    <requestFiltering>
+      <hiddenSegments>
+        <remove segment="bin"/>
+      </hiddenSegments>
+    </requestFiltering>
+  </security>
+  <httpErrors existingResponse="PassThrough" />
+ </system.webServer>
+</configuration>
+```
+
+Now we have a running Node + React app that's also configured for Azure, it's time to deploy. Go to Azure and create a `Web App`.
+
+<img src={azureWebapp} title="Azure Web App" className="mb-175" />
+
+You have 2 options to deploy your app on Azure:
+
+1. Using [FTP](https://docs.microsoft.com/en-us/azure/app-service/deploy-ftp)
+2. Using [Azure Pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops)
+
+I'm not going to explain the FTP option because it's pretty straightforward: just upload your whole application using any FTP client to the given server.
+
+For Azure Pipelines (my preferred way), you have to create a `azure-pipelines.yml` at the project root. It's a file that basically tells Azure how to build your application:
+
+```yaml
+resources:
+- repo: self
+  fetchDepth: 1
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- script: |
+    zip -r result.zip . -x .git/**\* > /dev/null
+  displayName: 'package results'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.SourcesDirectory)/result.zip' 
+    artifactName: 'drop' 
+  displayName: 'upload artifacts'
+```
+
+Now go to your webapp, then go to `Deployment Center` under `Deployment` menu, and click `Edit`. You will be redirected to the Azure Pipelines page, where you will see a tab called `Triggers`. Go there to create your build triggers, so that your pipeline runs every time you push a commit to a specific branch.
+
+This is it. After you make another push to your Git remote (e.g. GitHub), your project will be automatically built and deployed. Now you can have a drink and enjoy your Node API + React app on Azure. Let me know if you have any questions, and have a great day.
+
+</div>

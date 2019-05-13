@@ -32,6 +32,7 @@
   font-size: 0.85rem;
   line-height: 1.5;
 }
+
 :global pre {
   border-radius: 10px;
   overflow: auto;
@@ -41,6 +42,7 @@
 :global a {
   color: var(--primary-color);
 }
+
 :global a:hover {
   text-decoration: none;
 }
@@ -82,6 +84,7 @@
   padding: 0.5em 10px;
   quotes: "\201C""\201D""\2018""\2019";
 }
+
 :global blockquote:before {
   color: #ccc;
   content: open-quote;
@@ -90,12 +93,18 @@
   margin-right: 0.25em;
   vertical-align: -0.4em;
 }
+
 :global blockquote p {
   display: inline;
 }
+
 :global hr {
   background: hsla(0,0%,0%,0.2);
   border: none;
   height: 1px;
   margin: 2rem 0;
+}
+
+:global .mb-175 {
+  margin-bottom: 1.75rem;
 }
