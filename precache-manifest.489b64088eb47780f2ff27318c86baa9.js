@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "be338a53653a058affed",
+    "revision": "2eb5f11f37f5abc3b4dd",
     "url": "/static/css/main.19cb9a36.chunk.css"
   },
   {
-    "revision": "be338a53653a058affed",
-    "url": "/static/js/main.be338a53.chunk.js"
+    "revision": "2eb5f11f37f5abc3b4dd",
+    "url": "/static/js/main.2eb5f11f.chunk.js"
   },
   {
     "revision": "6a69a664682db47e41a1",
@@ -200,7 +200,7 @@ self.__precacheManifest = [
     "url": "/static/media/azure-webapp.7d59f165.png"
   },
   {
-    "revision": "3ee8bcacede643a335b920c16fb6fc60",
+    "revision": "cd9e0579fe9e48bc5adde21c98ab0ffe",
     "url": "/index.html"
   }
 ];
