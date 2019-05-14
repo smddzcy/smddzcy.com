@@ -1,4 +1,5 @@
-import sqlReport from "./sql-report.png";
+import { Link } from 'react-navi'
+import sqlReport from "./sql-report.png"
 
 <div>
 
@@ -20,7 +21,7 @@ I was using (and had to use) Cosmos DB in one of my big projects for the last fe
      </figcaption>
    </figure>
 
-Microsoft told us the SQL API is better, and we could solve all of our issues by switching to that. So we decided it's better to make the switch immediately without growing our codebase any larger. We made the switch with a couple of tricks (which I will explain in my <a href="../2019-05-15/mongooselike-orm-for-azure-cosmos-db-sql-api" title="Mongoose-like ORM for Azure Cosmos DB SQL API">next post</a>), and actually all the issues above were solved, but then we had many other issues:
+Microsoft told us the SQL API is better, and we could solve all of our issues by switching to that. So we decided it's better to make the switch immediately without growing our codebase any larger. We made the switch with a couple of tricks (which I will explain in my <Link href="/posts/2019-05-15/mongooselike-orm-for-azure-cosmos-db-sql-api" title="Mongoose-like ORM for Azure Cosmos DB SQL API">next post</Link>), and actually all the issues above were solved, but then we had many other issues:
 
 1. **Immutable partition-key values**  
    Cosmos DB distributes your data across regions by your provided partition-key field. It's great, but the problem is, Cosmos DB makes that field _immutable_. In other words, you can never change the value of a partition-key in any of your documents. In many cases, it forces you to use `id` as a partition-key, and it results in cross-partition (thus slow) queries.

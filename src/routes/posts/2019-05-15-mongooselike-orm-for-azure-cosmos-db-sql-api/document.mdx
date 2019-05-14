@@ -1,6 +1,8 @@
+import { Link } from 'react-navi'
+
 <div>
 
-I talked about <a href="../2019-05-14/azure-cosmos-db-review" title="Cosmos DB review, pros and cons">pros and cons of Cosmos DB</a> in my previous post, and mentioned that we migrated from Cosmos DB Mongo API to SQL API with a few tricks. I'm going to explain those tricks in this post.
+I talked about <Link href="/posts/2019-05-14/azure-cosmos-db-review" title="Cosmos DB review, pros and cons">pros and cons of Cosmos DB</Link> in my previous post, and mentioned that we migrated from Cosmos DB Mongo API to SQL API with a few tricks. I'm going to explain those tricks in this post.
 
 We had a large codebase (and a few separate small codebases) using Mongoose queries all over and I didn't want to change all of them to SQL queries. I find SQL queries hard to read/write/maintain, and also plain ugly. For example, a simple Mongoose query like this:
 
