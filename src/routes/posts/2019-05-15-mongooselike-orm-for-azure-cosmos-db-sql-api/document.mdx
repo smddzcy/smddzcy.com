@@ -1,0 +1,275 @@
+<div>
+
+I talked about <a href="../2019-05-14/azure-cosmos-db-review" title="Cosmos DB review, pros and cons">pros and cons of Cosmos DB</a> in my previous post, and mentioned that we migrated from Cosmos DB Mongo API to SQL API with a few tricks. I'm going to explain those tricks in this post.
+
+We had a large codebase (and a few separate small codebases) using Mongoose queries all over and I didn't want to change all of them to SQL queries. I find SQL queries hard to read/write/maintain, and also plain ugly. For example, a simple Mongoose query like this:
+
+```js
+const store = await Store.findOne(
+  { code: 'abc' },
+  null,
+  { sort: { referenceNo: -1 } }
+);
+```
+
+Translates to a huge Cosmos DB SQL query like this:
+
+```js
+const querySpec = {
+  query: 'SELECT TOP 1 * FROM stores s WHERE s.code = @code ORDER BY s.referenceNo DESC',
+  parameters: [{ name: '@code', value: 'abc' }],
+};
+// assume that your Cosmos DB container is available at `this.container`
+const { result: items } = await this.container.items.query(querySpec).toArray();
+const store = items[0];
+```
+
+You see the Mongoose query is extremely easy to write and read, while the SQL query requires lots of lines of code and a good SQL knowledge.
+
+It wasn't the only issue. Even if I loved SQL and wanted to use it everywhere, we were using lots of Mongoose features like hooks, default values, schema field properties like `trim` and `enum`, validations and more. Doing all of these with the SQL API seemed very scary, so I just thought writing my own Mongoose-like ORM for Cosmos DB would be much easier. That way I would keep using the amazing Mongoose API as well, so I did that.
+
+## Converting Mongo Queries to SQL Queries
+
+First thing to solve was to convert Mongo queries like `.find` to SQL queries with `SELECT`.
+
+Thankfully, I didn't have to reinvent the wheel. I found an amazing npm package called [mongo-sql](https://www.npmjs.com/package/mongo-sql) that converts Mongo queries to Postgres-style SQL queries, but since Cosmos DB SQL syntax was not exactly _SQL_, it didn't work well for many queries. So I made a fork of that and patched/changed some stuff to support Cosmos DB queries, and voila. I had my Mongo-Cosmos query converter ready: https://github.com/smddzcy/mongo-sql
+
+```js
+const sqlBuilder = require('mongo-sql'); // from https://github.com/smddzcy/mongo-sql#master
+const sql = sqlBuilder.sql({
+  type: 'select',
+  table: 'stores',
+  where: { code: 'abc' },
+  order: { referenceNo: 'desc' },
+});
+/*
+{ query:
+   'select * from stores where stores.code = @p1 order by stores.referenceNo desc',
+  values: [ 'abc' ],
+  original:
+   { type: 'select',
+     table: 'stores',
+     where: { code: 'abc' },
+     order: { referenceNo: 'desc' },
+     __defaultTable: 'stores',
+     columns: [ '*' ] },
+  toString: [Function],
+  toQuery: [Function] }
+*/
+const sqlStr = sql.toString();
+// select * from stores where stores.code = @p1 order by stores.referenceNo desc
+```
+
+## Implementing the Schema Class
+
+The second and the last thing was implementing a `Schema` class, just like Mongoose's, which supports hooks, field properties like `enum`, `default`, `trim`, and some other features.
+
+I didn't implement all the features of Mongoose, since it would be meaningless and it would take lots of my time. I implemented a basic `Schema` class that supports _enough_ of the features - features that I use. It turned out to be very easy and fun to implement. You can find the final `Schema` class and the other related code [in my public gist](https://gist.github.com/smddzcy/acd58d9fc4ae0bb2102b2c5e36df6ea3), but here's how it looks like:
+
+```js
+// schema.js
+const _ = require('lodash');
+const Redis = require('ioredis');
+const sqlBuilder = require('mongo-sql'); // from https://github.com/smddzcy/mongo-sql#master
+const uuid = require('uuid');
+const throat = require('throat');
+const DbError = require('../error/dbError');
+const cast = require('../cast');
+
+const client = new CosmosClient({ endpoint: '...', key: '...' });
+const database = client.database('...');
+
+const cacheTtl = 3600;
+
+const autoAddedFields = {
+  id: String,
+  _rid: String,
+  _self: String,
+  _etag: String,
+  _attachments: String,
+  _ts: Number,
+};
+
+class Schema {
+  constructor(schema, options) {
+    // ...
+  }
+
+  // ...
+
+  addHook(type, hook) {
+    this.hooks.push({ type, hook });
+  }
+
+  async _runHooks(type, object) {
+    await Promise.all(this.hooks
+      .filter(hook => hook.type === type)
+      .map(hook => hook.hook(object)));
+    return object;
+  }
+
+  map(obj, isRead = true) {
+    if (!obj) return obj;
+    if (Array.isArray(obj)) {
+      return obj.map(el => this.map(el, isRead));
+    }
+    // ...
+    return ret;
+  }
+
+  async create(model, options = ({ deleteCache: true, runHooks: true })) {
+    const now = new Date();
+    if (this.timestamps) {
+      if (!('createdAt' in model)) {
+        model.createdAt = now;
+      }
+      if (!('updatedAt' in model)) {
+        model.updatedAt = now;
+      }
+    }
+    // map defaults etc
+    const mappedModel = this.map(model, false);
+    if (options.runHooks) {
+      await this._runHooks('beforeCreate', mappedModel);
+    }
+    if (options.deleteCache) {
+      this._deleteCacheForType('sql');
+    }
+    if (!mappedModel.id) {
+      // see: https://github.com/Azure/azure-cosmos-js/issues/241
+      mappedModel.id = uuid.v4();
+    }
+    const { body } = await this._container.items.create(mappedModel);
+    return this.map(body, true);
+  }
+
+  // ...
+
+  async _find(query, options = {}) {
+    const sql = sqlBuilder.sql({
+      type: 'select',
+      table: this.collection,
+      where: query,
+      ...options,
+    });
+    const sqlStr = sql.toString();
+    const params = sql.values.map((value, idx) => ({ name: `@p${idx + 1}`, value }));
+    const cacheLabel = sqlStr.replace(/@(p\d*)/g, (...args) => `'${params.find(v => v.name === args[0]).value}'`);
+
+    // get the docs from cache or db
+    const mappedDocs = await this._getFromCacheOrSet('sql', cacheLabel, async () => {
+      const querySpec = {
+        query: sqlStr,
+        parameters: params,
+      };
+      const { result: items } = await this._container.items.query(querySpec, {
+        enableCrossPartitionQuery: true,
+      }).toArray();
+      return items;
+    }).then(this.map);
+
+    // make the populations, if any requested
+    if (options.populate && [].concat(options.populate).length > 0) {
+      await Promise.all(
+        [].concat(options.populate).map(async field => {
+          if (!this.schema[field]) {
+            throw new DbError(`${field} does not exist in the schema`);
+          }
+          if (!this.schema[field].ref) {
+            throw new DbError(`${field} does not have a 'ref' field`);
+          }
+          if (!Schema._registeredModels[this.schema[field].ref]) {
+            throw new DbError(`${this.schema[field].ref} is not a registered model`);
+          }
+          const model = Schema._registeredModels[this.schema[field].ref];
+          const ids = _.uniq(_.compact(mappedDocs.map(doc => doc[field])));
+          const docs = await Promise.all(
+            ids.map(throat(20, id => model.findById(id).catch(() => null))),
+          );
+          const idToDoc = ids.reduce((xs, x, idx) => {
+            xs[x] = model.map(docs[idx]);
+            return xs;
+          }, {});
+          mappedDocs.forEach(mappedDoc => {
+            if (mappedDoc[field] && idToDoc[mappedDoc[field]]) {
+              mappedDoc[field] = idToDoc[mappedDoc[field]];
+            } else {
+              mappedDoc[field] = null;
+            }
+          });
+        }),
+      );
+    }
+
+    return mappedDocs;
+  }
+
+  find(query, options) {
+    if ((!query || Object.keys(query).length === 0)
+      && (!options || Object.keys(options).length === 0)) {
+      // minor optimization
+      return this.findAll();
+    }
+    return this._find(query, options);
+  }
+
+  async findOne(query, options) {
+    options = options || {};
+    let items = [];
+    try {
+      items = await this._find(query, { ...options, limit: 1 });
+    } catch (ignored) {
+      // single-partition query failed, try cross-partition
+      items = await this._find(query, options);
+    }
+    return items[0];
+  }
+
+  // ...
+}
+
+module.exports = Schema;
+```
+
+Also here's how a model looks like:
+
+```js
+const Schema = require('./schema');
+
+const Store = new Schema({
+  name: { type: String, trim: true },
+  code: { type: String, trim: true },
+  referenceNo: Number,
+  // ... other fields
+}, {
+  model: 'Store',
+  collection: 'stores',
+  partitionKey: 'id',
+  timestamps: true,
+});
+
+// you can add hooks
+Store.addHook('beforeCreate', async (obj) => {
+  // auto-increment referenceNo
+  const store = await Store.findOne({}, { order: { referenceNo: 'desc' } });
+  obj.referenceNo = store.referenceNo + 1;
+});
+
+module.exports = Store;
+```
+
+Then I could use Cosmos DB as if I was using Mongoose. All of my queries are automatically turned into SQL queries:
+
+```js
+const store = await Store.findOne(
+  { code: 'abc' },
+  { order: { referenceNo: 'desc' } }
+);
+// SQL query run in the background:
+// 'select * from stores where stores.code = @p1 order by stores.referenceNo desc'
+// @p1 parameter = 'abc'
+```
+
+I hope this will help you deal with ugly SQL queries and actually enjoy using Cosmos DB. Have a great day!
+
+</div>

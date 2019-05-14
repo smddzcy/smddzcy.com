@@ -1,0 +1,63 @@
+import sqlReport from "./sql-report.png";
+
+<div>
+
+For those of you who don't know, [Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) is a globally distributed database service by Microsoft Azure. It's easy to use, but in my opinion and experience, it's really not comparable to AWS DynamoDB or GCP Bigtable when it comes to reliability and speed. It has some serious issues, which I'm going to explain in this blog post.
+
+I was using (and had to use) Cosmos DB in one of my big projects for the last few months. It was my first time using any Azure tech seriously in a production system, and I can easily say that it wasn't a pleasurable experience. I was specifically using its Mongo API with Mongoose, and it was a _disaster_. We had to send many tickets to Microsoft and deal with countless issues ourselves; issues including but not limited to:
+
+1. `MongoError: cursor killed or timed out`  
+  https://social.msdn.microsoft.com/Forums/en-US/7862be04-2396-4679-a5be-72acded1ad16/mongoerror-cursor-does-not-exist-was-killed-or-timed-out?forum=azurecosmosdb  
+ Sometimes randomly, sometimes for a big-ish query (returning >1k docs), Cosmos DB was killing Mongo cursors for no specific reason. We tried to solve it ourselves, we failed, then sent a ticket to Microsoft. They made a configuration for our DB and it _magically_ solved the issue. (I still don't know why Cosmos DB doesn't come with that _magic configuration_)
+
+2. Microsoft says (in its official Cosmos DB docs) Mongo API is a _fully-supported_ API, but they don't officially support any Mongo ORM, including Mongoose. I don't know how that's possible; supporting a database API but not others extending that supported API. Get prepared to have _lots of_ issues if you're planning to use Mongoose with Cosmos DB.
+
+3. Query speed was the biggest issue. We were waiting about a minute to get 10-15k docs with a very simple `.find` operation.
+   <figure>
+     <img src={sqlReport} title="Terrible Cosmos DB speed" />
+     <figcaption>
+       <em>Query for 10k docs with basic filters take 42 seconds</em>
+     </figcaption>
+   </figure>
+
+Microsoft told us the SQL API is better, and we could solve all of our issues by switching to that. So we decided it's better to make the switch immediately without growing our codebase any larger. We made the switch with a couple of tricks (which I will explain in my <a href="../2019-05-15/mongooselike-orm-for-azure-cosmos-db-sql-api" title="Mongoose-like ORM for Azure Cosmos DB SQL API">next post</a>), and actually all the issues above were solved, but then we had many other issues:
+
+1. **Immutable partition-key values**  
+   Cosmos DB distributes your data across regions by your provided partition-key field. It's great, but the problem is, Cosmos DB makes that field _immutable_. In other words, you can never change the value of a partition-key in any of your documents. In many cases, it forces you to use `id` as a partition-key, and it results in cross-partition (thus slow) queries.
+
+2. **Stateless cross-partition queries**  
+   You can't use `OFFSET`, `LIMIT`, `TOP`, `ORDER BY`... or any other stateful SQL query on a cross-partition query, e.g. you can't do pagination if your query spans across many regions (and in many cases it does, because of partition-key value being immutable).
+
+3. **Poor `JOIN` support**  
+   Cosmos DB SQL API doesn't support cross-document joins (i.e. the `JOIN` you know). It only supports [joining documents with themselves](https://docs.microsoft.com/en-us/azure/cosmos-db/how-to-sql-query#Joins), which makes the whole JOIN operation a joke.
+
+4. **Incomplete SQL API**  
+  Cosmos DB SQL API is not actually _the SQL_ you know. It's a subset of SQL with a few additions, which means it's not as powerful as SQL. One example is that it doesn't support nested queries.
+
+5. **Mysterious auto-indexing**  
+  Cosmos DB does the indexing for you, though a bit _mysteriously_. You can't specify which fields to index, and you can't control any part of the process. It's not exactly an issue, but it's not something good as well.
+
+6. **No partial document update**  
+  Not a terrible issue again; but you can't partially update a document on Cosmos DB. If you want to update a document, you have to provide a whole new document and Cosmos DB replaces the old one with that.
+
+7. **No bulk operations**  
+  You can't update/remove many documents at once. It is really not convenient.
+
+The list goes on. Even pagination support (`OFFSET`/`LIMIT`) just arrived a few days ago (11 May 2019): https://feedback.azure.com/forums/263030-azure-cosmos-db/suggestions/6350987--documentdb-allow-paging-skip-take
+
+But it doesn't mean that Cosmos DB is _all bad_. It does have its pros as well, again including but not limited to:
+
+1. **Geo-redundancy with multi-master writes**  
+  It's not an easy problem to solve, and it's definitely not easy to solve on a global scale. It seems like Cosmos DB solved it pretty well.
+
+2. **Multiple API support (SQL, Mongo, Graph..)**  
+  Although all APIs are not equally loved by Cosmos DB (as explained above), it does have support for different data modeling needs, which I think is awesome. It makes Cosmos DB very flexible and easy-to-use.
+
+3. **High scalability, tunable consistency, global distribution...**  
+  It has all the cloud database features you need, and probably more.
+
+All in all, as of writing this blog post, I don't think Cosmos DB is the best cloud database solution out there. Its Mongo API has serious issues, and its SQL API is not mature/usable enough yet. But I don't think it's the worst either. It's just another option you need to consider depending on your business needs. I still think you should consider other options first though 😉
+
+Have a great day, and let me know if you have any comments/questions.
+
+</div>
