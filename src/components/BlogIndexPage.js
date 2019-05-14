@@ -43,13 +43,13 @@ function BlogIndexPage({
           >
             RSS
           </a>
-          <Link href="./about">
+          <Link href="/about">
             About
           </Link> &bull;{' '}
-          <Link href="./travel-map">
+          <Link href="/travel-map">
             Travel Map
           </Link> &bull;{' '}
-          <Link href="./tags">
+          <Link href="/tags">
             Tags
           </Link>
         </div>
