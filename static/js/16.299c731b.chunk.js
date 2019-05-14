@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[16],{156:function(o,e,n){"use strict";n.r(e),e.default={title:"Mongoose-like ORM for Azure Cosmos DB SQL API",tags:["azure","cosmos db","sql","mongoose","mongo","node"],spoiler:"There is no ORM for Cosmos DB SQL API in Node yet, but it doesn't mean we can't create one.",getContent:function(){return n.e(31).then(n.bind(null,141))}}}}]);
+//# sourceMappingURL=16.299c731b.chunk.js.map

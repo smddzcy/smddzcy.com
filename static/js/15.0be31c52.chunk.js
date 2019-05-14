@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[15],{155:function(e,t,o){"use strict";o.r(t),t.default={title:"Azure Cosmos DB Review",tags:["azure","cosmos db","review"],spoiler:"I was exposed to lots of Microsoft tech in the last few months. One of them was Cosmos DB, and I will share my experience with it today.",getContent:function(){return o.e(30).then(o.bind(null,139))}}}}]);
+//# sourceMappingURL=15.0be31c52.chunk.js.map
