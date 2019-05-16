@@ -43,6 +43,7 @@ function BlogPostLayout({ blogRoot }) {
             <meta name="twitter:description" content={data.spoiler} />
             <meta name="twitter:title" content={title} />
             <meta name="twitter:image" content={imageUrl} />
+            <meta name="twitter:site" content="@smddzcy" />
             <meta name="twitter:creator" content="@smddzcy" />
             <meta name="twitter:url" content={postUrl} />
             <script type="application/ld+json">{JSON.stringify({
