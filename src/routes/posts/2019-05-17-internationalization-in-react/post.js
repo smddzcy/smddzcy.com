@@ -1,6 +1,6 @@
 export default {
   title: 'Internationalization in React',
   tags: ['react', 'i18n', 'internationalization'],
-  spoiler: 'Finding the most convenient solution for i18n (internationalization) in React.',
+  spoiler: 'Finding the most convenient solution for i18n in React is not really easy given there are lots of options.',
   getContent: () => import('./document.mdx'),
 };
