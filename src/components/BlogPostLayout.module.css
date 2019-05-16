@@ -193,6 +193,7 @@
 
 .postSocial {
   display: flex;
+  flex-flow: row wrap;
   justify-content: space-between;
   margin-top: 3rem;
 }
@@ -211,6 +212,15 @@
 }
 .faIcon {
   margin-right: 5px;
+}
+@media screen and (max-width: 700px) {
+  .faIconText {
+    display: none;
+  }
+  .faIcon {
+    font-size: 2em;
+    margin: 0;
+  }
 }
 
 :root {

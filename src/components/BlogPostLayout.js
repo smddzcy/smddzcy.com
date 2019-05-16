@@ -28,37 +28,37 @@ function SocialShare(config) {
         <span className={styles.faIcon}>
           <FontAwesomeIcon icon={faFacebookF} />
         </span>
-        <span className="text">Facebook</span>
+        <span className={styles.faIconText}>Facebook</span>
       </FacebookShareButton>
       <TwitterShareButton {...config} className={[styles.socialButton, styles.twitter]} via="smddzcy">
         <span className={styles.faIcon}>
           <FontAwesomeIcon icon={faTwitter} />
         </span>
-        <span className="text">Twitter</span>
+        <span className={styles.faIconText}>Twitter</span>
       </TwitterShareButton>
       <LinkedinShareButton {...config} className={[styles.socialButton, styles.linkedin]}>
         <span className={styles.faIcon}>
           <FontAwesomeIcon icon={faLinkedinIn} />
         </span>
-        <span className="text">LinkedIn</span>
+        <span className={styles.faIconText}>LinkedIn</span>
       </LinkedinShareButton>
       <RedditShareButton {...config} className={[styles.socialButton, styles.reddit]}>
         <span className={styles.faIcon}>
           <FontAwesomeIcon icon={faRedditAlien} />
         </span>
-        <span className="text">Reddit</span>
+        <span className={styles.faIconText}>Reddit</span>
       </RedditShareButton>
       <WhatsappShareButton {...config} className={[styles.socialButton, styles.whatsapp]}>
         <span className={styles.faIcon}>
           <FontAwesomeIcon icon={faWhatsapp} />
         </span>
-        <span className="text">WhatsApp</span>
+        <span className={styles.faIconText}>WhatsApp</span>
       </WhatsappShareButton>
       <TelegramShareButton {...config} className={[styles.socialButton, styles.telegram]}>
         <span className={styles.faIcon}>
           <FontAwesomeIcon icon={faTelegram} />
         </span>
-        <span className="text">Telegram</span>
+        <span className={styles.faIconText}>Telegram</span>
       </TelegramShareButton>
     </div>
   );
