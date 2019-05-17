@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{149:function(t,n,e){"use strict";e.r(n),n.default={title:"Multithreading in Java",tags:["java","multi-threading","concurrency","threads"],spoiler:"A thread is a small component of a process, that can run concurrently with the other components (threads).",getContent:function(){return e.e(24).then(e.bind(null,126))}}}}]);
-//# sourceMappingURL=9.d801cc5a.chunk.js.map

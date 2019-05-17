@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{284:function(t,a,e){"use strict";e.r(a),a.default={title:"Default Methods in Java 8",tags:["java","java8","tutorial","lambda","stream api","functional programming"],spoiler:"Last time I've talked about Streams in Java 8 and now it's time to talk about interface default methods.",getContent:function(){return e.e(24).then(e.bind(null,254))}}}}]);
+//# sourceMappingURL=8.661cc1a6.chunk.js.map

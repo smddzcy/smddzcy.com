@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{143:function(e,n,t){"use strict";t.r(n);var i=t(1);n.default=i.n({title:"Travel Map",getView:function(){return Promise.all([t.e(33),t.e(18)]).then(t.bind(null,116))}})}}]);
-//# sourceMappingURL=3.a99d1bc3.chunk.js.map
