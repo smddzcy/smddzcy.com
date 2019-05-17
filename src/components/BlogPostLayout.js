@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFacebookF, faTwitter, faLinkedinIn, faRedditAlien, faWhatsapp, faTelegram,
 } from '@fortawesome/free-brands-svg-icons';
-import { kebabCase } from 'change-case';
+import { camelCase } from 'change-case';
 import siteMetadata from '../siteMetadata';
 import ArticleMeta from './ArticleMeta';
 import Bio from './Bio';
@@ -140,7 +140,7 @@ function BlogPostLayout({ blogRoot }) {
           >
             <MDXComponent />
           </MDXProvider>
-          <SocialShare url={postUrl} title={title} hashtags={data.tags.map(tag => kebabCase(tag))} />
+          <SocialShare url={postUrl} title={title} hashtags={data.tags.map(tag => camelCase(tag))} />
           <div style={{ marginTop: '1rem' }}>
             <DiscussionEmbed shortname="smddzcy" config={disqusConfig} />
           </div>
