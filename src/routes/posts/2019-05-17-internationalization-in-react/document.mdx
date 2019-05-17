@@ -1,5 +1,235 @@
 <div>
 
+It's a very natural need: providing your application in different languages. I will try to look at 2 popular i18n libraries for React today, and discuss the pros and cons of each option.
 
+> Since internationalization is a **veeeery** long word, I'll abbreviate it to "i18n". Localization can also be considered long, so it'll be abbreviated to "l10n".
+
+## Option 1: react-intl
+
+### Popularity
+
+- **Weekly downloads from npm:** 371,603
+- **Dependent npm packages:** 1,451
+- **GitHub stars:** 9,875
+- **Issues:** 189
+
+As of writing this, `react-intl` looks like the most popular choice for i18n in React. It has a huge user base with almost 400k downloads per week. It also has lots of examples and articles online.
+
+### Features
+
+It is a huge library that does both i18n and l10n. It formats dates, numbers, and strings, including pluralization and handling translations. It probably has everything you need from an i18n/l10n library:
+
+- Display numbers with localized separators
+- Display localized dates and times
+- Pluralize labels in strings
+- Support for lots of (150+) languages
+- Runs in the browser and Node.js
+- Follows the standards
+
+### How to Use
+
+Install the library:
+
+```bash
+yarn add react-intl
+```
+
+Wrap your application with `IntlProvider` providing the user's locale and translations for that locale:
+
+```jsx
+import { IntlProvider } from 'react-intl';
+
+// ...
+
+const usersLocale = 'en';
+const translationsForUsersLocale = {
+  'blog.title': `Blog of {whom} - {viewCount, number} {viewCount, plural,
+    one {view}
+    other {views}
+  }`
+};
+
+ReactDOM.render(
+    <IntlProvider
+        locale={usersLocale}
+        messages={translationsForUsersLocale}
+    >
+        <App/>
+    </IntlProvider>,
+    document.getElementById('root')
+);
+```
+
+Then use `FormattedMessage` to translate, pluralize, format strings:
+
+```jsx
+import { FormattedMessage } from 'react-intl';
+
+<FormattedMessage
+  id="blog.title"
+  values={{ whom: 'Samed Düzçay', viewCount: 5000 }}
+/>
+// => Blog of Samed Düzçay - 5,000 views
+```
+
+There are also other components like `FormattedHTMLMessage`, `FormattedNumber`, `FormattedDate`... and more to localize other forms of strings. You can check all of those and more from the official docs: https://github.com/formatjs/react-intl/wiki
+
+One small note: By default, `react-intl` only contains the locale data for English, but it provides a simple API to add locales as needed:
+
+```jsx
+import { addLocaleData } from 'react-intl';
+import en from 'react-intl/locale-data/en';
+import fr from 'react-intl/locale-data/fr';
+
+addLocaleData([...en, ...fr, ...es]);
+```
+
+### Pros/Cons
+
+It is a very scalable i18n solution, but IMHO it's not an easy-to-use one. Its API is a bit complex - maybe even too complex for small and mid-size projects. I'd recommend `react-intl` for big projects where you need a complete &amp; scalable localization system.
+
++ **+** Complete localization solution
++ **+** Support for many locales
++ **+** Scalable, flexible
++ **-** Hard to use
+
+## Option 2: react-i18next
+
+### Popularity
+
+- **Weekly downloads from npm:** 186,357
+- **Dependent npm packages:** 444
+- **GitHub stars:** 3,222
+- **Issues:** 2
+
+It is also a super popular choice for i18n with almost 200k downloads per week, and again, you can find lots of tutorials and examples online.
+
+### Features
+
+It's a smaller library than `react-intl`, but as far as I've seen it's **really** flexible and it does the job just as well.
+
+- Built on top of a core that's really flexible
+- Pluralize labels in strings
+- Support for multiple languages
+- Runs in the browser and Node.js
+- Follows the standards
+
+### How to Use
+
+New version of `react-i18next` supports React Hooks (yay 🎉) so you have 2 ways: you can use the hook `useTranslation` for your functional components and use the HOC `withTranslation` for your old &amp; bulky class components. I'm going to be using the hook version for the examples, but the HOC version is just as simple to use.
+
+Install the libraries:
+
+```bash
+yarn add i18next react-i18next i18next-browser-languagedetector
+```
+
+Create a file called `i18n.js` and configure the library:
+
+```jsx
+// i18n.js
+import i18n from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
+
+i18n
+  // detect user language
+  // learn more: https://github.com/i18next/i18next-browser-languageDetector
+  .use(LanguageDetector)
+  // pass the i18n instance to react-i18next.
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'en',
+    debug: true,
+    // I'm hardcoding the translations here for the sake of simplicity,
+    // but in a real-world application you would get these from a backend.
+    // i18next has a small plugin that makes it easy.
+    // learn more: https://github.com/i18next/i18next-xhr-backend
+    resources: {
+      'en':{
+        'translation': {
+          test: 'Test translation'
+        }
+      }
+    },
+    interpolation: {
+      escapeValue: false, // not needed for React as it escapes by default
+    },
+});
+```
+
+Import the `i18n.js` from your `index.js` so it gets bundled:
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+
+import './i18n'; // <-----
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+Now you can use the hook or the HOC easily in any component. Here's a simple example:
+
+```jsx
+// App.js
+import React, { Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
+
+function Page() {
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = lng => {
+    i18n.changeLanguage(lng);
+  };
+
+  return (
+    <div className="App">
+      <div className="App-header">
+        <button onClick={() => changeLanguage('de')}>de</button>
+        <button onClick={() => changeLanguage('en')}>en</button>
+      </div>
+      <div>{t('test')}</div>
+    </div>
+  );
+}
+
+const Loader = () => (
+  <div className="App">
+    <div>loading...</div>
+  </div>
+);
+
+// here Suspense shows the Loader in case translations are not yet loaded
+export default function App() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <Page />
+    </Suspense>
+  );
+}
+```
+
+`useTranslation` hook gives you an object with 2 important keys:
+
+- `t`: It's a function that takes a translation key and returns the translated message. In our case above, `t('test')` returns our translation `Test translation`.
+- `i18n`: It's an object with a very important function in it, `changeLanguage`. It's pretty self-explanatory; you can change the language by using that function.
+
+If you want to learn more, check the documentation page: https://react.i18next.com/
+
+### Pros/Cons
+
+It is a very simple i18n solution that's also very flexible.
+
++ **+** Extremely easy-to-use i18n solution
++ **+** Support for many locales
++ **+** Scalable, very flexible
++ **-** Not as complete as `react-intl`
+
+---
+
+All in all, I think `react-i18next` is a simpler &amp; more developer-friendly library that can also be used in very big projects thanks to its flexibility and simple API. As of writing, `react-i18next` is my go-to i18n solution for all of my projects.
 
 </div>
