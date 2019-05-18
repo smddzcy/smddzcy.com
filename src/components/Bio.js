@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Bio.module.css';
+import profilePic from './profilepic.png';
 
 function Bio(props) {
   return (
@@ -8,7 +9,7 @@ function Bio(props) {
       ${props.className || ''}
     `}
     >
-      <img src="https://pbs.twimg.com/profile_images/781276128673689600/tGOdd3qK_400x400.jpg" alt="Me" />
+      <img src={profilePic} alt="Me" />
       <div>
         <div>
           personal blog of <a href="https://twitter.com/smddzcy" title="Twitter" rel="nofollow noopener noreferrer" target="_blank">Samed Düzçay</a>.
