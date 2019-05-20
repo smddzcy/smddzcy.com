@@ -117,7 +117,7 @@ Last week I switched to `pnpm` because it is a **clear winner** in 2019. It has 
 
 - It is much faster than both npm and yarn. See the benchmarks [here](https://github.com/pnpm/benchmarks-of-javascript-package-managers).
 
-- It deduplicates the Node packages all over your system by using symlinks, meaning you will have a single copy of `lodash` in your system from now on (yay 🎉). I saved 15 gigs of space last week just by switching to pnpm!
+- It deduplicates Node modules across the system using hard links, then uses symlinks inside each project's `node_modules`; meaning you will have a single copy of `lodash` in your system from now on (yay 🎉). I saved 15 gigs of space last week just by switching to pnpm!
 
   Yarn thought about using symlinks [in the past](https://github.com/yarnpkg/yarn/issues/1761#issuecomment-259706202) too, but decided otherwise for a couple of reasons. pnpm worked just fine for me so far, so personally, I don't really care for those reasons. It's a great alternative to Yarn if it also works for you.
 
