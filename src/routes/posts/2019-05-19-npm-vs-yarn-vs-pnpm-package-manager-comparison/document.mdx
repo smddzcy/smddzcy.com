@@ -1,0 +1,134 @@
+<div>
+
+I have been using `npm` for the last 4 years, `yarn` for the last 2 years, and I've just switched to `pnpm` a couple of days ago. It means I change my Node package manager every 2 years, and I think I will change `pnpm` in the next 2 years as well.
+
+A Debian user might be using `apt` for the last gazillion years without even considering changing it, but JavaScript world is _a bit_ different. Modern web apps need more and more every day. We wanted composable UI elements, which brought us libraries like Angular and React. We wanted faster navigation, which brought us [SPA](https://en.wikipedia.org/wiki/Single-page_application)s. We wanted better UX on mobile devices, and we didn't stop, we wanted our apps to work just as fine for users with unreliable internet connections, which brought us [PWA](https://developers.google.com/web/progressive-web-apps/)s. God knows what we will want in the next 2 years.
+
+In this ever-changing world, package managers need to change as well. We want them to handle our dependencies better, we want them to run reliably on all environments, we want them to do better caching.. and a ton of other things. So even though they all do one simple thing at their core - managing your Node dependencies, they still do it in very different ways.
+
+## NPM
+
+It's the original **N**ode **P**ackage **M**anager (it goes by [many names](https://gist.github.com/bmintz/949d3654460c37bb0cbb78f994a72355) though). It was also the **only** Node package manager for quite some time. All other Node package managers that came after it had to adopt many of the design decisions made by npm, because they had to be compatible. One of these design decisions is [**semantic versioning**](https://semver.org/).
+
+<blockquote>
+<span style={{ display: 'inline-block', marginBottom: 15 }}>Given a version number MAJOR.MINOR.PATCH, increment the:</span>
+
+1. MAJOR version when you make incompatible API changes,
+2. MINOR version when you add functionality in a backward-compatible manner, and
+3. PATCH version when you make backward-compatible bug fixes.
+
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+</blockquote>
+
+npm stores your dependency information on a file called `package.json`. It is like `requirements.txt` for pip or `build.gradle` for Gradle. It looks something like this:
+
+```json
+// package.json
+{
+  "name": "smddzcy.com",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "https://smddzcy.com",
+  "dependencies": {
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build && navi-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "serve": "navi-scripts serve",
+    "generate": "plop --plopfile generators/index.js",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
+}
+```
+
+It doesn't only store your dependency information; but also some other things like build commands, your package name, homepage and more. As you can see all the packages are versioned according to the semver scheme with `MAJOR.MINOR.PATCH` versions.
+
+Notice the `^` before the versions. It tells `npm` to automatically update your packages to the latest `MINOR.PATCH` version, keeping the same `MAJOR` version. It sounds reasonable, right? Because according to the semver scheme, minor versions contain only backward-compatible features, and patch versions contain backward-compatible bug fixes, so updating the minor/patch versions won't do anything bad to your code.
+
+In reality, though, it doesn't always work that good. Developers break the APIs and add backward-**in**compatible functionalities in minor versions, or it sometimes _works fine in your machine_ but not on the others because of countless-many possibilities. So you might want to disable this auto-update feature, install exact versions, and update the packages as needed.
+
+To do this, you can remove the `^` from all versions, or you can simply tell npm to install exact versions by default with the `--save-exact` setting ([docs](https://docs.npmjs.com/misc/config#save-exact)). But this doesn't solve the issue because it only forces **your** dependencies to have exact versions. Your dependencies, or basically anything down the dependency-tree could still have `^` in front of their dependency versions since they also have `package.json` files and they also depend on a bunch of Node packages. So nothing is really solved - you'll still have very different bundles in different environments.
+
+To solve this issue, npm came up with a command called `shrinkwrap` ([docs](https://docs.npmjs.com/cli/shrinkwrap)), which later on changed to `package-lock.json` in npm 5. They work [exactly the same](https://github.com/npm/cli/blob/latest/doc/spec/package-lock.md) with a few minor differences. A lockfile, `package-lock.json` in this case, basically locks the versions of your top-level dependencies. Since all of your dependencies also has lockfiles, all your dependency tree has locked versions and our problem is now solved.
+
+At least _almost_ solved. Now the issue is: `npm install` [updates the package locks](https://stackoverflow.com/a/45566871/5244968) whenever a newer version is found for a dependency, which ruins the whole purpose of having predictable builds with exact dependency versions. To solve this, npm came up with a new command called `npm ci`. It respects your lockfile and only downloads the versions specified there. After years of discussions and new npm versions, _finally_, the issue is solved.
+
+So why don't I use npm today? As of writing, there are still many other issues npm hasn't solved yet. Here are 2 of those issues that immediately affect me today:
+
+- If you have 100 Node packages in your system and you use the same dependency `A` in all of them, you'll end up with 100 copies of `A` in your hard-drive. If you have a low disk space like me, having 50 gigs of `node_modules` folders in your disk is a **huge** problem.
+
+- npm has a flat dependency-tree since npm 3, which solves lots of issues, but it results in super messy `node_modules` folders. If you have 10 dependencies, you expect to see 10 folders in `node_modules`. But what you see is 2000 folders because npm puts all of your dependency-tree in a flat format to your `node_modules`. Finding your module there is like finding a needle in a haystack.
+
+  Another issue of this flat structure is that you end up being able to actually **use** your sub-dependencies in your code. You can actually `require` or `import` something that's not immediately in your `package.json` but in a `package.json` of one of your dependencies. It results in hard-to-track bugs which is not something I like.
+
+## Yarn
+
+Yarn is exactly like npm 5. The main reason why I switched to Yarn was its `yarn.lock`, which works exactly like `package-lock.json`. Yarn just implemented this feature before npm. Yarn was faster, its cache worked better, and it had `yarn.lock`, so I made the switch 2 years ago.
+
+Today npm has all the cool features of Yarn. Maybe the only advantage of Yarn is that it has a simpler CLI and it has a cool command called `upgrade-interactive` which lets you upgrade your packages interactively.
+
+```bash
+> yarn upgrade-interactive
+
+[1/? Choose which packages to update. (Press <space> to select, <a> to toggle all, <i> to inverse s
+election)
+ devDependencies
+❯◯ autoprefixer      6.7.7  ❯  7.0.0          https://github.com/postcss/autoprefixer#readme
+ ◯ webpack           2.4.1  ❯  2.5.1          https://github.com/webpack/webpack
+
+ dependencies
+ ◯ bull              2.2.6  ❯  3.0.0-alpha.3  https://github.com/OptimalBits/bull#readme
+ ◯ fs-extra          3.0.0  ❯  3.0.1          https://github.com/jprichardson/node-fs-extra
+ ◯ socket.io         1.7.3  ❯  1.7.4          https://github.com/socketio/socket.io#readme
+ ◯ socket.io-client  1.7.3  ❯  1.7.4          https://github.com/Automattic/socket.io-client#readme
+```
+
+Some commands like `npm install` are easier with Yarn and it has better defaults:
+
+```bash
+# you need `--save` to add package-a to your package.json
+npm install --save package-a
+
+# `yarn add` automatically adds the package to your package.json
+yarn add package-a
+```
+
+```bash
+# `--save-dev` adds the package to your dev dependencies
+npm install --save-dev package-a
+
+# same command in Yarn
+yarn add --dev package-a
+```
+
+I don't see a clear winner between npm vs. yarn in 2019, both are equally good and mature. Sometimes Yarn works faster, sometimes npm. Sometimes Yarn has cache issues, sometimes npm. I think Yarn is _just a bit_ more reliable and has a better API.
+
+## pnpm
+
+Last week I switched to `pnpm` because it is a **clear winner** in 2019. It has all the features of `npm` and `yarn` and it just outperforms them in many aspects.
+
+- It is much faster than both npm and yarn. See the benchmarks [here](https://github.com/pnpm/benchmarks-of-javascript-package-managers).
+
+- It deduplicates the Node packages all over your system by using symlinks, meaning you will have a single copy of `lodash` in your system from now on (yay 🎉). I saved 15 gigs of space last week just by switching to pnpm!
+
+  Yarn thought about using symlinks [in the past](https://github.com/yarnpkg/yarn/issues/1761#issuecomment-259706202) too, but decided otherwise for a couple of reasons. pnpm worked just fine for me so far, so personally, I don't really care for those reasons. It's a great alternative to Yarn if it also works for you.
+
+- It has a "strictness" feature which is explained [here](https://medium.com/pnpm/never-ever-forget-to-install-a-dependency-1c39dd3bbb37). This feature forbids you to use any module that's not in your `package.json`. IMHO it's a great feature that lets you avoid some hard-to-track bugs.
+
+It's pretty obvious from its name but, it has the same API as `npm`. Just replace `npm` with `pnpm` in your code and voila - you switched from `npm` to `pnpm`. It makes the switch easy, but I would enjoy using pnpm with Yarn's API better.
+
+---
+
+All in all, I think pnpm is the best Node package manager in 2019. `yarn` only beats `pnpm` in maturity and adoption, so it's still the safest option out there.
+
+Give `pnpm` a try and see if it works for you. Have a great day!
+
+</div>
