@@ -1,0 +1,116 @@
+<div>
+
+I interviewed with lots of tech companies including some big ones like Google, Bloomberg, Palantir; and recently passed the Google software engineer interviews. I also interviewed lots of people for technical roles, so I thought it'd be nice to share what I know.
+
+Passing a technical interview always boils down to having a **good core knowledge in computer science** and **good problem-solving skills**. Unfortunately, there are no magic tricks that will help you pass interviews without having these skills first, but it doesn't mean that there are no tips and tricks at all. Sometimes it doesn't matter whether you are a superstar in computer science; you won't pass many technical interviews if you don't follow some basic rules. I'm going to explain those rules, share some resources, and help you crack the software engineering interviews in this blog post.
+
+## Before the Interview
+
+If you're a CS student who has already taken algorithms and data structures course(s), I think 2-3 months of deliberate practice is enough to pass the technical interviews of many companies, including Google. If you're someone who has a zero background in CS, you'll probably need at least 6-7 months to familiarize yourself and get totally ready.
+
+No matter how good or bad you are, you'll need some time to get ready. Here's what you should know/do before the interviews.
+
+### 1. Know the Basics By Heart
+
+You **must** know all the core data structures and algorithms by heart. Period. It comes before everything else, and without this, nothing else will really matter.
+
+You should know arrays, vectors, [binary trees](https://www.geeksforgeeks.org/overview-of-data-structures-set-2-binary-tree-bst-heap-and-hash/#code5), [heaps](https://www.geeksforgeeks.org/overview-of-data-structures-set-2-binary-tree-bst-heap-and-hash/#code7), [graphs](https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/), [tries](https://www.geeksforgeeks.org/trie-insert-and-search/). You should know how to traverse a graph, how to build a trie, how to sort lists in different ways. You should know where to use each data structure and the pros/cons of different algorithms. You should be able to implement these core data structures and algorithms in _minutes_.
+
+I recommend these books that will help you learn the basics and prepare you to the interviews at the same time:
+
+1. [Cracking the Coding Interview](https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/098478280X): I can't recommend this enough. It explains all the basic data structures and algorithms, and it has amazing interview questions.
+2. [Programming Interviews Exposed](https://www.amazon.com/Programming-Interviews-Exposed-Secrets-Landing/dp/1118261364): Another great book, absolutely recommended.
+
+#### Extra points
+
+Once you learn all the basics, you can start working on your coding style. Companies are looking for software engineers who can work together as a team, and working as a team is only possible if everyone's writing **clear, easy-to-understand, reusable code**.
+
+You should know where to do functional programming and where to go with the old procedural style. You should know the importance of type-safety, but also where to avoid it. You should know the pros and cons of different software architectures. Here are some books that'll improve your programming skills:
+
+- [Effective Java](https://www.amazon.com/Effective-Java-Joshua-Bloch/dp/0134685997): I highly recommend this if you're writing Java. It is just an amazing book that will make you a better programmer.
+
+- [Clean Code](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882): Another great book from a software design expert. You'll learn how to write code with no duplication and minimal number of focused entities (e.g. functions, classes).
+
+### 2. Practice A Lot
+
+After you learn the basics, start solving **a lot of** interview questions regularly. Persistence is the key to success. This will dramatically improve your problem-solving skills and also help you familiarize with the style/types of interview questions.
+
+When you're stuck with a question, get incremental help from others. Don't check the answer immediately, but rather get hints first. This will help you learn how to process the hints and build a solution by yourself. In a real interview, the interviewer will give you hints and expect you to understand them.
+
+There are a couple of websites that I recommend for interview questions:
+
+1. [Leetcode](https://leetcode.com/): The best platform to prepare for technical interviews. Has great interview questions and a great community.
+
+2. [InterviewBit](https://www.interviewbit.com/): Leetcode doesn't let you filter the interview questions by companies if you're a free user, but this site does. For example, you can see the [Google interview questions](https://www.interviewbit.com/search/?q=Google) specifically. It is just amazing.
+
+3. [HackerRank](https://www.hackerrank.com/): Lots of questions, huge community. Usually, the questions are easier and less realistic than Leetcode, but they will definitely help you improve.
+
+4. [Careercup](https://careercup.com/): Another great website with a great community. You can find some companies' interview questions here as well, for example, the [Facebook interview questions](https://careercup.com/page?pid=facebook-interview-questions).
+
+### 3. Do Mock Interviews
+
+Practicing interview questions is one thing, but practicing the whole interview process is completely another thing. You should do as many mock interviews as you can with real engineers or interviewers before the actual interview.
+
+You will do lots of mistakes in your first few interviews. You'll get nervous, you'll forget all the tips you've learned, and you'll find suboptimal solutions to the questions. You should do mock interviews to pass this _newbie_ stage and become a _pro_ before the actual interview.
+
+There are some platforms that you can do mock interviews for free:
+
+1. [interviewing.io](https://interviewing.io/): Great platform with real engineers from big companies.
+
+2. [Pramp](https://www.pramp.com/): Do mock interviews with your peers. Another great platform for helping each other.
+
+3. [Crossing Paths](https://kesisenyollar.org/en/): If you're Turkish, this is where you should go for mock interviews and interview preparation in general. Selim Önal is a great mentor with an amazing background.
+
+## During the Interview
+
+As I've said, there are some basic rules you should follow during the interview. No matter how good you are, you will do terrible mistakes and won't get that offer if you don't follow these easy-to-implement rules.
+
+1. **Clarify the question**:
+
+  Most of the time the interviewer will leave out some critical details about the problem and expect you to ask the right questions to figure them out. The problem will be about a tree, but you won't know if it's a binary or ternary tree until you ask. You will be asked to sort a list, but you won't know if the list contains only alphanumeric characters or the whole Unicode charset until you ask.
+  
+  These small details will make substantial differences to your solution. Clarify the question before doing anything else, but also ask _just enough_ questions so that you won't waste more than 10 mins on this stage.
+
+2. **Find good example inputs**:
+
+  Before starting to solve the question, think of all possible input cases and find simple examples for each case. For example; if you're solving a question involving a binary tree node, prepare 3 simple examples: a node with no child, a node with 1 child, and a node with 2 children. If possible, find the expected outputs for all of these examples as well, so that you can simultaneously test your code while you're implementing it.
+
+3. **Decompose the problem**:
+
+  Palantir does a specific interview called [decomp](https://www.palantir.com/2014/10/how-to-ace-a-software-decomp-interview/), which basically evaluates how well you're able to break down a problem into its nitty-gritty components. Even if you're not gonna interview with Palantir, I think it's an amazing skill that will help you solve all types of questions easily.
+
+  Before starting to think about an algorithm, decompose the problem into its subproblems. When you have some example inputs and the subproblems ready, most of the time you will immediately find a solution or at least notice some subproblems look like something you've solved before, so it will make the process a lot easier.
+
+4. **Start with the simplest solution**:
+
+  I made this mistake a couple of times, and so will you if you don't follow this rule. When you solve thousands of algorithm questions, you start to develop a sense for runtime complexities of problems. Even if it's the first time you're seeing a problem and you have no idea about the solution, something in your brain tells you immediately that this problem can be solved in O(N) time. So you start searching for that O(N) solution.
+
+  Sometimes it works well and you find the O(N) solution quickly, and it's really the most optimized solution. Kudos to you for finding the best solution so quickly 👏. But sometimes, well, it turns out that the problem can't be solved in O(N). You will search for that solution for 20 mins, start missing hints because you're getting obsessed and nervous at the same time, and forget everything you've learned about interviews.
+
+  It's really a terrible experience to have, so here's a **golden tip**: always start with the simplest brute-force solution, then improve it until you no longer can. Implement the O(2<sup>N!</sup>) recursion before implementing the O(N<sup>2</sup>) DP. Sort that list in O(N<sup>2</sup>) before doing parallel mergesort. **Always start simple, then optimize**.
+
+5. **Test your solution after the implementation**:
+
+  When you finish implementing your solution, don't wait for the interviewer to test your code. Test it yourself. You should've found example test cases before the implementation, now use them to go over your code line by line and see if it actually works.
+
+  **Another golden tip:** If your code doesn't work for a test case, don't try to fix it immediately by adding a few more lines of code. It's like duct-taping the holes in your car while the engine is barely working. Instead, take a step back and try to understand the core problem. Almost always you'll see that your algorithm is broken or you made a small mistake somewhere.
+
+6. **Always communicate and lead the interview**:
+
+  Always communicate during the interview. The interviewer can't telepathically know what's on your mind, so think out loud. Tell why you're using a specific algorithm and its pros/cons over other possible algorithms. Tell what you're gonna do next and why you're gonna do that.
+  
+  Basically, **lead the interview** so that the interviewer won't have to do the talking. The interviewer is only there to watch and evaluate how you build a solution for a complex problem.
+
+### After the Interview
+
+There is not much to do after the interview really. Just thank the interviewer(s) for their time, write a concise and honest thank you email to your recruiter, maybe add everyone on LinkedIn, and wait.
+
+If you followed everything above successfully, there's a great chance that you will get an offer. Good luck 🍀
+
+---
+
+
+Knowledge grows when shared. If this article helped you in any way, forward it to your friends or just share on your favorite social media platform. You can also let me know if you have any questions or comments using the comment box below. Have a great day!
+
+
+</div>
