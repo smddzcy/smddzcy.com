@@ -1,3 +1,5 @@
+const slugify = require('slugify');
+
 module.exports = {
   description: 'Create a new blog post',
   prompts: [
@@ -32,12 +34,7 @@ module.exports = {
     if (d < 10) {
       d = `0${d}`;
     }
-    const avoidInSlug = ['a', 'an', 's', 't'];
-    data.slug = (data.title || '').replace(/[^\w\s]/g, '')
-      .match(/\w+/ig)
-      .map(word => word.toLowerCase())
-      .filter(word => !avoidInSlug.includes(word))
-      .join('-');
+    data.slug = slugify((data.title || '').toLowerCase());
     const actions = [
       {
         type: 'add',
