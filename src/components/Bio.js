@@ -23,7 +23,7 @@ function Bio(props) {
           &bull;
           <a href="https://twitter.com/smddzcy" rel="nofollow noopener noreferrer" target="_blank" style={{ margin: '0 5px' }}>Twitter</a>
           &bull;
-          <a href="/cv" title="CV" style={{ margin: '0 5px' }}>CV</a>
+          <a href="/cv/" title="CV" style={{ margin: '0 5px' }}>CV</a>
         </div>
       </div>
     </div>
