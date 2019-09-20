@@ -96,6 +96,7 @@ const routes = compose(
     '/tags': lazy(() => import('./tags')),
     '/about': lazy(() => import('./about')),
     '/travel-map': lazy(() => import('./travel-map')),
+    '/portfolio': lazy(() => import('./portfolio')),
 
     // Only the statically built copy of the RSS feed is intended to be opened,
     // but the route is defined here so that the static renderer will pick it

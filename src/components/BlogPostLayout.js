@@ -113,7 +113,7 @@ function BlogPostLayout({ blogRoot }) {
           </Helmet>
           <header className={styles.header}>
             <h1 className={styles.title}>
-              <Link href={url.pathname}>{title}</Link>
+              <Link href={url.pathname}>{title}</Link>aaaaaaaaaaa
             </h1>
             <ArticleMeta
               blogRoot={blogRoot}

@@ -90,7 +90,7 @@ const tagRoutes = compose(
             tagRoutes.push(route);
           }
         });
-
+        console.log(req);
         return (
           <TagPage
             blogRoot={context.blogRoot}
