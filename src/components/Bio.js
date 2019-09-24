@@ -24,6 +24,8 @@ function Bio(props) {
           <a href="https://twitter.com/smddzcy" rel="nofollow noopener noreferrer" target="_blank" style={{ margin: '0 5px' }}>Twitter</a>
           &bull;
           <a href="/cv/" title="CV" style={{ margin: '0 5px' }}>CV</a>
+          &bull;
+          <a href="/projects/" title="projects" style={{ margin: '0 5px' }}>Projects</a>
         </div>
       </div>
     </div>

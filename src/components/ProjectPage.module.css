@@ -1,0 +1,6 @@
+.ProjectCardContainer {
+  width: 43.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+}
