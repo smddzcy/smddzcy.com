@@ -1,11 +1,11 @@
 import React from 'react';
 import { join } from 'path';
 import { Link } from 'react-navi';
+import { formatDate } from '../utils/formats';
 import styles from './ProjectCard.module.css';
 import dummy_project_logo from './dummy_project_logo.png';
 
 function ProjectCard({ blogRoot, project, idx }) {
-  console.log(idx, ((idx + 1) % 3 === 0 ? { marginRight: '0rem'} : {}))
   return (
     <div
       className={styles.ProjectCard}
@@ -27,7 +27,7 @@ function ProjectCard({ blogRoot, project, idx }) {
       </label>
       <div className={styles.ProjectCardBottom}>
         <label className={styles.ProjectCardBottomText}>
-          {project.date}
+          <time dateTime={project.date.toUTCString()}>{formatDate(project.date)}</time>
         </label>
         <Link
           className={styles.ProjectCardBottomText}

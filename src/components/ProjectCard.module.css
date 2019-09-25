@@ -3,7 +3,7 @@
   width: 18rem;
   height: 15rem;
   background-color: white;
-  box-shadow: 0px -1rem 100px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: -5px -5px 25px rgba(102, 125, 255, 0.2);
   padding: 0.625rem;
   display: flex;
   flex-direction: column;

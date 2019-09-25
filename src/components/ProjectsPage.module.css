@@ -1,0 +1,9 @@
+.ProjectsPage {
+  max-width: 43.5rem;
+}
+
+.ProjectCardContainer {
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+}
