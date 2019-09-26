@@ -8,9 +8,12 @@
   margin-bottom: 0;
 }
 
+.header > h1 > a {
+  color: black;
+}
 .CarouselContainer {
   margin-bottom: 2rem;
-  background-color: rgba(102, 125, 255, 1);
+  /* background-color: rgba(102, 125, 255, 1); */
   align-items: center;
   /* padding-left: 0.3125rem; */
   padding-top: 0.525rem;
@@ -18,8 +21,6 @@
 
 .ProjectVideoContainer {
   /* background-color: rgba(102, 125, 255, 1); */
-  background-color: rgba(102, 125, 255, 1);
-  /* box-shadow: 0px -5px 100px -35px rgba(102, 125, 255, 1); */
   display: flex;
   justify-content: center;
 }
@@ -39,4 +40,44 @@
 
 .contTitle {
   font-size: 0.83333125rem;
+}
+
+
+.links {
+  display: flex;
+  justify-content: space-between;
+}
+.links .next {
+  flex-grow: 1;
+  flex-shrink: 1;
+  text-align: right;
+}
+
+.ImageDialog {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px) saturate(0.1);
+  z-index: 500;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+.image {
+  position: fixed;
+}
+
+.close {
+  position: absolute;
+  color: white;
+  font-size: 32px;
+  z-index: 10000;
+  top: 50px;
+  right: 100px;
+  cursor: pointer;
 }

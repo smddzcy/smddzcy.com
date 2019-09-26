@@ -6,8 +6,9 @@ export default {
     slogan: 'Book, Park & Charge Anywhere',
     url: 'https://www.zuubi.uk/',
     video: dumym_video,
-    sc_shoots: [dummy_app_ss, dummy_app_ss],
+    date: '2019-05-01',
+    sc_shoots: [dummy_app_ss, dummy_app_ss, dummy_app_ss, dummy_app_ss],
     tags: ['javascript', 'react', 'react-native', 'expo', 'ios'],
-    spoiler: 'Yaraktan kurekten bi uygulama iste aq.',
+    spoiler: 'Seni sevmek olumse, koyam gotune gulumse.',
     getContent: () => import('./document.mdx'),
 };

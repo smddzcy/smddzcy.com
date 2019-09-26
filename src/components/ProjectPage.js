@@ -1,36 +1,57 @@
 import React from 'react';
-import { Link } from 'react-navi';
+import { Link, useCurrentRoute } from 'react-navi';
 import ItemsCarousel from 'react-items-carousel';
-import { MDXProvider } from '@mdx-js/tag';
 import ArticleMeta from './ArticleMeta';
+import SocialShare from './SocialShare';
+import siteMetadata from '../siteMetadata';
+import { camelCase } from 'change-case';
+import { DiscussionEmbed } from 'disqus-react';
+import Bio from './Bio';
+import MDX from './MDX';
 import styles from './ProjectPage.module.css';
 
-function ProjectsPage({ blogRoot, MDXComponent, project }) {
-  const {
-    date, tags, title, slogan, sc_shoots, url, video, contributors,
-  } = project;
-
+function ProjectsPage({ blogRoot, MDXComponent, data }) {
+  const { project, previousProject, nextProject } = data;
   const [activeItemIndex, changeActiveItem] = React.useState(0);
+  const [selectedImage, setSelectedImage] = React.useState(null);
+  const { url } = useCurrentRoute();
+  const postUrl = `https://smddzcy.com${url.href}`;
+  const disqusConfig = {
+    url: postUrl,
+    identifier: project.slug,
+    title: project.title,
+  };
+
+  if (selectedImage) {
+    document.body.style.overflowX = "hidden";
+    document.body.style.overflowY = "hidden";
+  } else {
+    document.body.style.overflowX = "visible";
+    document.body.style.overflowY = "visible";
+  }
 
   return (
   <div className={styles.ProjectPage}>
+    {selectedImage && (
+      <div className={styles.ImageDialog}>
+        <label onClick={() => setSelectedImage(null)} className={styles.close}>✕</label>
+        <img className={styles.image} width={375} src={selectedImage} />
+      </div>
+    )}
     <header className={styles.header}>
       <h1 className={styles.title}>
-        {slogan}
-      </h1>
-      <h1 className={styles.title}>
-        <a rel="nofollow noopener noreferrer" target="_blank" href={url}>{title}</a>
+        <a rel="nofollow noopener noreferrer" target="_blank" href={project.url}>{project.title}</a>
       </h1>
       <ArticleMeta
         blogRoot={blogRoot}
-        meta={{ date, tags }}
+        meta={{ date: project.date, tags: project.tags }}
       />
-      {contributors && (
+      {project.contributors && (
         <div className={styles.ProjectContributors}>
           <label className={styles.contTitle}>Contributors: </label>
           <ul className={styles.conts}>
-            {contributors.map(cont => (
-              <li key={cont}>
+            {project.contributors.map(cont => (
+              <li key={cont.name}>
                 <a href={`https://twitter.com/${cont.twitter}`} rel="nofollow noopener noreferrer" target="_blank">{cont.name}</a>
               </li>
             ))}
@@ -38,7 +59,8 @@ function ProjectsPage({ blogRoot, MDXComponent, project }) {
           </div>
       )}
     </header>
-    {sc_shoots && (
+    <MDX MDXComponent={MDXComponent}/>
+    {project.sc_shoots && (
       <div className={styles.CarouselContainer}>
         <ItemsCarousel
           // Placeholder configurations
@@ -49,7 +71,7 @@ function ProjectsPage({ blogRoot, MDXComponent, project }) {
 
           // Carousel configurations
           numberOfCards={3}
-          gutter={12}
+          gutter={1}
           showSlither={true}
           firstAndLastGutter={false}
           freeScrolling={false}
@@ -65,36 +87,48 @@ function ProjectsPage({ blogRoot, MDXComponent, project }) {
           leftChevron={'<'}
           outsideChevron={true}
         >
-          {sc_shoots.map((ss, idx) => <img src={ss} alt={ss} />)}
+          {project.sc_shoots.map((ss, i) => <img onClick={() => setSelectedImage(ss)} key={i} src={ss} alt={ss} />)}
         </ItemsCarousel>
       </div>
     )}
-    <MDXProvider components={{
-      a: props => {
-        const newProps = { ...props };
-        if (!props.rel && props.href.includes('http')) {
-          // external link
-          newProps.rel = 'nofollow noopener noreferrer';
-          newProps.target = '_blank';
-        }
-        return <Link {...newProps} />;
-      },
-      wrapper: ({ children }) => (
-        <div className={styles.content}>
-          {children}
-        </div>
-      ),
-    }}
-    >
-      <MDXComponent />
-    </MDXProvider>
-    {video && (
+    {project.video && (
       <div className={styles.ProjectVideoContainer}>
-        <video style={{ width: "35%" }} controls>
-          <source src={video} type="video/mp4" />
+        <video width="228.891" height="404.359" controls>
+          <source src={project.video} type="video/mp4" />
         </video>
       </div>
     )}
+    <SocialShare url={postUrl} title={project.title} hashtags={project.tags.map(tag => camelCase(tag))} />
+      <div style={{ marginTop: '1rem' }}>
+        <DiscussionEmbed shortname="smddzcy" config={disqusConfig} />
+      </div>
+      <footer className={styles.footer}>
+        <h3 className={styles.title}>
+          <Link href={blogRoot}>
+            {siteMetadata.title}
+          </Link>
+        </h3>
+        <Bio className={styles.bio} />
+        <section className={styles.links}>
+          {
+            previousProject
+            && (
+            <Link className={styles.previous} href={`/projects/${previousProject.slug}`}>
+              ← {previousProject.title}
+            </Link>
+            )
+          }
+          {
+            nextProject
+            && (
+            <Link className={styles.next}href={`/projects/${nextProject.slug}`}>
+              {nextProject.title} →
+            </Link>
+            )
+          }
+        </section>
+      </footer>
+    
   </div>
   );
 }

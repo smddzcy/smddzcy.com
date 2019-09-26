@@ -1,33 +1,33 @@
 import React from 'react';
 import importAll from 'import-all.macro';
 import * as Navi from 'navi';
-import slugify from 'slugify';
+import slugify from 'slugify'
 import ProjectsPage from '../../components/ProjectsPage';
 import ProjectPage from '../../components/ProjectPage';
 
 const projectModules = importAll.deferred('./**/project.js');
 const projectPathnames = Object.keys(projectModules);
-const datePattern = /^((\d{1,4})-(\d{1,4})-(\d{1,4}))[/-]/;
+const datePattern = /(\d{1,4})\w+/g;
 
 let projects = projectPathnames.map(pathname => {
   const slug = slugify(
     pathname.replace(/project.jsx?$/, '').replace(/(\d)\/(\d)/, '$1-$2'),
   )
     .replace(/^[-.]+|[.-]+$/g, '')
-    .replace(datePattern, '$1/');
-
-  let date;
-  const dateMatch = slug.match(datePattern);
-  if (dateMatch) {
-    date = new Date(dateMatch[2], parseInt(dateMatch[3], 10) - 1, dateMatch[4]);
-  }
 
   const details = require(`${pathname}`).default;
+
+  let date;
+  const dateMatch = details.date.match(datePattern);
+  if (dateMatch) {
+    date = new Date(dateMatch[0], parseInt(dateMatch[1], 10) - 1, dateMatch[2]);
+  }
+
   return {
     slug,
     pathname,
+    ...details,
     date,
-    ...details
   };
 });
 
@@ -52,14 +52,19 @@ const projectRoutes = Navi.compose(
     }),
 
     '/:project': Navi.route({
-      getTitle: req => req.params.project,
+      getTitle: req => req.params.project[0].toUpperCase() + req.params.project.substr(1),
       getView: async (req, context) => {
-        const project = projects.filter(project => project.title.toLowerCase() === req.params.project)[0]
+        const project = projects.filter(project => req.originalUrl.includes(project.slug))[0];
         const { default: MDXComponent } = await project.getContent();
+        const idx = projects.indexOf(project);
         return <ProjectPage
           MDXComponent={MDXComponent}
-          project={project}
-          blogRoot={context.blogRoot}  
+          data={{
+            project,
+            previousProject: idx !== 0 ? projects[idx - 1] : null,
+            nextProject: idx !== projects.length - 1 ? projects[idx + 1] : null,
+          }}
+          blogRoot={context.blogRoot}
         />
       }
     }),

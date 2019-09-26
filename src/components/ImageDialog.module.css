@@ -1,0 +1,14 @@
+.dialog {
+  box-shadow: 0 8px 6px -6px black;
+  position: absolute;
+  left: 20%;
+  top: 10%;
+  z-index: 1000;
+}
+
+.small {
+  height: 300px;
+}
+.image {
+  height: 600px;
+}

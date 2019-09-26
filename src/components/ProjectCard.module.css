@@ -9,7 +9,7 @@
   flex-direction: column;
   justify-content: flex-start;
   border-bottom: 0.2500rem solid var(--primary-color-light);
-  margin-right: 4.875rem;
+  /* margin-right: 4.875rem; */
   margin-bottom: 4rem;
 }
 
@@ -23,6 +23,7 @@
 
 .ProjectCard:hover label {
   color: white;
+  opacity: 1;
 }
 
 .ProjectCard:hover > div > a {

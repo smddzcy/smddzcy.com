@@ -31,7 +31,7 @@ function ProjectCard({ blogRoot, project, idx }) {
         </label>
         <Link
           className={styles.ProjectCardBottomText}
-          href={join(blogRoot, 'projects', project.title.toLowerCase())} 
+          href={join(blogRoot, 'projects', project.slug.toLowerCase())} 
         >
           Read more...
         </Link>
