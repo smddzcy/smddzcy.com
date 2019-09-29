@@ -7,6 +7,7 @@ export default {
     url: 'https://www.zuubi.uk/',
     video: dumym_video,
     date: '2019-05-01',
+    contributors: [{ name: "Samed Düzçay", twitter: 'smddzcy'}, {name: "Onur Coşkun", twitter: 'cynewulff'}],
     sc_shoots: [dummy_app_ss, dummy_app_ss, dummy_app_ss, dummy_app_ss],
     tags: ['javascript', 'react', 'react-native', 'expo', 'ios'],
     spoiler: 'Seni sevmek olumse, koyam gotune gulumse.',

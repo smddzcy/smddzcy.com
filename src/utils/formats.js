@@ -8,3 +8,11 @@ export function formatDate(dateString) {
 
   return `${monthName} ${dayOfMonth}, ${fourDigitYear}`;
 }
+
+export function formatDateWithoutDay(dateString) {
+  const date = new Date(dateString);
+  const monthName = months[date.getMonth()];
+  const fourDigitYear = date.getFullYear();
+
+  return `${monthName}, ${fourDigitYear}`;
+}

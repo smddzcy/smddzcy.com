@@ -1,0 +1,101 @@
+.CarouselContainer {
+  margin: auto !important;
+  position: relative;
+  display: block;
+  background: transparent;
+}
+
+.CarouselContainer > * {
+  list-style: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.prevBtn {
+  left: -1.5625rem;
+}
+
+.nextBtn {
+  right: -1.5625rem;
+}
+
+.absBtn {
+  position: absolute;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: transparent;
+  top: 50%;
+  transform: translate(0, -50%);
+  padding: 0;
+  width: 1.25rem;
+  height: 25%;
+  opacity: .50;
+}
+
+.absBtn > label {
+  width: 100%;
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: var(--primary-color-light);
+  cursor: pointer;
+}
+
+.absBtn:hover {
+  opacity: 1;
+}
+
+.CarouselList {
+  position: relative;
+  overflow: hidden;
+}
+
+.CarouselTrack {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  margin: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: height 0.15s ease-in;
+}
+
+.CarouselAnimated {
+  display: flex;
+  transition-duration: 444ms;
+  padding: 0;
+}
+
+.CarouselTrack > ul {
+  margin: 0;
+}
+
+.CarouselSlide {
+  min-width: 100%;
+  margin: 0;
+  margin: 0;
+  position: relative;
+  text-align: center;
+  list-style: none;
+}
+
+.CarouselDotWrapper {
+}
+
+.CarouselDotContainer {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.CarouselDot {
+  list-style: none;
+  margin-right: 0.3125rem;
+  font-size: 2.5rem;
+  line-height: 1.5625rem;
+  text-align: center;
+  cursor: pointer;
+}

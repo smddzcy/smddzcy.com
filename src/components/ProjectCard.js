@@ -1,7 +1,7 @@
 import React from 'react';
 import { join } from 'path';
 import { Link } from 'react-navi';
-import { formatDate } from '../utils/formats';
+import { formatDateWithoutDay } from '../utils/formats';
 import styles from './ProjectCard.module.css';
 import dummy_project_logo from './dummy_project_logo.png';
 
@@ -27,7 +27,7 @@ function ProjectCard({ blogRoot, project, idx }) {
       </label>
       <div className={styles.ProjectCardBottom}>
         <label className={styles.ProjectCardBottomText}>
-          <time dateTime={project.date.toUTCString()}>{formatDate(project.date)}</time>
+          <time dateTime={project.date.toUTCString()}>{formatDateWithoutDay(project.date)}</time>
         </label>
         <Link
           className={styles.ProjectCardBottomText}
