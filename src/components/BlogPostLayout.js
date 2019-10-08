@@ -68,7 +68,7 @@ function BlogPostLayout({ blogRoot }) {
               readingTime={readingTime}
             />
           </header>
-          <MDX MDXComponent={MDXComponent}/>
+          <MDX MDXComponent={MDXComponent} />
           <SocialShare url={postUrl} title={title} hashtags={data.tags.map(tag => camelCase(tag))} />
           <div style={{ marginTop: '1rem' }}>
             <DiscussionEmbed shortname="smddzcy" config={disqusConfig} />

@@ -2,6 +2,7 @@ import React from 'react';
 import importAll from 'import-all.macro';
 import * as Navi from 'navi';
 import slugify from 'slugify';
+import sortBy from 'lodash/sortBy';
 import ProjectsPage from '../../components/ProjectsPage';
 import ProjectPage from '../../components/ProjectPage';
 
@@ -9,7 +10,7 @@ const projectModules = importAll.deferred('./**/project.js');
 const projectPathnames = Object.keys(projectModules);
 const datePattern = /(\d{1,4})\w+/g;
 
-const projects = projectPathnames.map(pathname => {
+const projects = sortBy(projectPathnames.map(pathname => {
   const slug = slugify(
     pathname.replace(/project.jsx?$/, '').replace(/(\d)\/(\d)/, '$1-$2'),
   )
@@ -29,7 +30,7 @@ const projects = projectPathnames.map(pathname => {
     ...details,
     date,
   };
-});
+}), p => -p.date);
 
 const projectRoutes = Navi.compose(
   Navi.withContext((req, context) => ({
@@ -50,7 +51,10 @@ const projectRoutes = Navi.compose(
     }),
 
     '/:project': Navi.route({
-      getTitle: req => req.params.project[0].toUpperCase() + req.params.project.substr(1),
+      getTitle: req => {
+        const project = projects.filter(project => req.originalUrl.includes(project.slug))[0];
+        return project.title;
+      },
       getView: async (req, context) => {
         const project = projects.filter(project => req.originalUrl.includes(project.slug))[0];
         const { default: MDXComponent } = await project.getContent();

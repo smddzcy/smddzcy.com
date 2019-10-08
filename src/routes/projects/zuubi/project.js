@@ -18,7 +18,7 @@ export default {
   appUrl: 'https://apps.apple.com/us/app/zuubi/id1479840772',
   type: 'Cross-platform mobile app, landing page',
   tech: [
-    'React', 'React Native', 'Expo', 'MongoDB', 'Node.js', 'AWS',
+    'React', 'React Native', 'Expo', 'Node.js', 'MongoDB', 'AWS',
   ],
   date: '2019-09-01',
   logo,

@@ -21,7 +21,7 @@ export default {
   appUrl: 'https://apps.apple.com/tr/app/bartme-book-barter-platform/id1475653790',
   type: 'Cross-platform mobile app',
   tech: [
-    'React', 'React Native', 'Expo', 'MongoDB', 'Node.js', 'AWS',
+    'React', 'React Native', 'Expo', 'Node.js', 'MongoDB', 'AWS',
   ],
   date: '2019-08-01',
   logo,
