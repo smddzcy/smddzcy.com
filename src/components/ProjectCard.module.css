@@ -1,32 +1,30 @@
 
 .ProjectCard {
-  width: 18rem;
-  height: 15rem;
+  width: 19rem;
+  height: 16rem;
   background-color: white;
   box-shadow: -5px -5px 25px rgba(102, 125, 255, 0.2);
-  padding: 0.625rem;
+  padding: 1rem 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   border-bottom: 0.2500rem solid var(--primary-color-light);
   /* margin-right: 4.875rem; */
   margin-bottom: 4rem;
+  cursor: pointer;
+  user-select: none;
+  transition: 120ms ease-in-out background-color;
 }
 
-.ProjectCard:hover .ProjectCardMore {
-  cursor: pointer !important;
+.ProjectCard * {
+  transition: 50ms ease-in-out color;
 }
 
 .ProjectCard:hover {
-  background-color: var(--primary-color-light);
+  background-color: rgba(102, 125, 255, 0.85);
 }
 
-.ProjectCard:hover label {
-  color: white;
-  opacity: 1;
-}
-
-.ProjectCard:hover > div > a {
+.ProjectCard:hover * {
   color: white;
 }
 
@@ -34,22 +32,29 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 0.625rem;
+  margin-bottom: 1rem;
 }
 
 .ProjectLogo {
   height: 3.650rem;
   margin-right: 0.937rem;
+  border-radius: 10px;
 }
 
 .ProjectCardName {
+  font-weight: 600;
   font-size: 1.1rem;
+}
+
+.ProjectCardType {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 
 .ProjectCardSpoiler {
   width: 100%;
   height: 100%;
-  opacity: 0.6;
+  opacity: 0.8;
   font-size: 0.8rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -57,9 +62,9 @@
 
 .ProjectCardTags {
   font-size: 0.8rem;
-  opacity: 0.7;
+  opacity: 0.8;
   color: var(--primary-color-light);
-  height: 47.016;
+  margin-bottom: 0.2rem;
   text-decoration: none;
 }
 
@@ -73,7 +78,6 @@
 
 .ProjectCardBottomText {
   font-size: 0.6rem;
-  opacity: 1;
   color: var(--primary-color-light);
   height: 47.016;
   text-decoration: none;

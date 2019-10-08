@@ -27,7 +27,7 @@ function ArticleMeta({ blogRoot, meta, readingTime }) {
         && meta.tags.length
         && (
         <>
-          {meta.date && ` • `}
+          {meta.date && ' • '}
           <ul className={styles.tags}>
             {meta.tags.map(tag => (
               <li key={tag}>

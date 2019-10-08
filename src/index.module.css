@@ -14,6 +14,7 @@
 :global html {
   color: rgba(0, 0, 0, 0.9);
   font: 100%/1.75 Morriweather, Georgia, serif;
+  overflow-x: hidden;
 }
 
 :global body {
@@ -24,6 +25,8 @@
   margin: 0;
   padding: 0;
   word-wrap: break-word;
+  position: relative;
+  overflow-x: hidden;
 }
 
 :global(pre),

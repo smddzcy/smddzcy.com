@@ -3,7 +3,7 @@ import { Link } from 'react-navi';
 import { MDXProvider } from '@mdx-js/tag';
 import styles from './BlogPostLayout.module.css';
 
-function MDX({ MDXComponent }) {
+function MDX({ MDXComponent, className }) {
   return (
     <MDXProvider components={{
       a: props => {
@@ -16,7 +16,7 @@ function MDX({ MDXComponent }) {
         return <Link {...newProps} />;
       },
       wrapper: ({ children }) => (
-        <div className={styles.content}>
+        <div className={`${styles.content} ${className || ''}`}>
           {children}
         </div>
       ),
@@ -24,7 +24,7 @@ function MDX({ MDXComponent }) {
     >
       <MDXComponent />
     </MDXProvider>
-  )
+  );
 }
 
 export default MDX;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-navi';
 import styles from './Bio.module.css';
 import profilePic from './profilepic.png';
 
@@ -16,16 +17,16 @@ function Bio(props) {
           <br />
           software engineer, web enthusiast. shares articles, tutorials and his thoughts on various things.
         </div>
-        <div>
-          <a href="https://linkedin.com/in/smddzcy" rel="nofollow noopener noreferrer" target="_blank" style={{ marginRight: 5 }}>LinkedIn</a>
-          &bull;
-          <a href="https://github.com/smddzcy" rel="nofollow noopener noreferrer" target="_blank" style={{ margin: '0 5px' }}>GitHub</a>
-          &bull;
-          <a href="https://twitter.com/smddzcy" rel="nofollow noopener noreferrer" target="_blank" style={{ margin: '0 5px' }}>Twitter</a>
-          &bull;
-          <a href="/cv/" title="CV" style={{ margin: '0 5px' }}>CV</a>
-          &bull;
-          <a href="/projects/" title="projects" style={{ margin: '0 5px' }}>Projects</a>
+        <div className={styles.headerLinks}>
+          <Link href="/projects/" title="projects">Freelance Portfolio</Link>
+          <span className={styles.bull}>&bull;</span>
+          <a href="https://linkedin.com/in/smddzcy" rel="nofollow noopener noreferrer" target="_blank">LinkedIn</a>
+          <span className={styles.bull}>&bull;</span>
+          <a href="https://github.com/smddzcy" rel="nofollow noopener noreferrer" target="_blank">GitHub</a>
+          <span className={styles.bull}>&bull;</span>
+          <a href="https://twitter.com/smddzcy" rel="nofollow noopener noreferrer" target="_blank">Twitter</a>
+          <span className={styles.bull}>&bull;</span>
+          <a href="/cv/" title="CV">CV</a>
         </div>
       </div>
     </div>

@@ -11,3 +11,12 @@
   margin-right: 0.875rem;
   width: 3.5rem;
 }
+
+.headerLinks {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.headerLinks .bull {
+  margin: 0 5px;
+}

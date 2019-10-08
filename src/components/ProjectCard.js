@@ -1,43 +1,56 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { join } from 'path';
-import { Link } from 'react-navi';
+import { useNavigation } from 'react-navi';
 import { formatDateWithoutDay } from '../utils/formats';
 import styles from './ProjectCard.module.css';
-import dummy_project_logo from './dummy_project_logo.png';
 
 function ProjectCard({ blogRoot, project, idx }) {
+  const navigation = useNavigation();
+  const goToProject = useCallback(() => {
+    navigation.navigate(join(blogRoot, 'projects', project.slug.toLowerCase()));
+  }, [blogRoot, project.slug]);
   return (
     <div
       className={styles.ProjectCard}
       style={{
-      ...((idx + 1) % 2 === 0 ? { marginRight: '0rem'} : {}),
+        ...((idx + 1) % 2 === 0 ? { marginRight: '0rem' } : {}),
       }}
+      onClick={goToProject}
     >
       <div className={styles.ProjectCardTop}>
-        <img src={dummy_project_logo} alt="app_logo" className={styles.ProjectLogo}/>
-        <label className={styles.ProjectCardName}>
-          {project.title}
-        </label>
+        <img
+          src={project.logo}
+          alt={project.title}
+          className={styles.ProjectLogo}
+        />
+        <div>
+          <div className={styles.ProjectCardName}>
+            {project.title}
+          </div>
+          <div className={styles.ProjectCardType}>
+            {project.type}
+          </div>
+        </div>
       </div>
-      <label className={styles.ProjectCardSpoiler}>
+      <div className={styles.ProjectCardSpoiler}>
         {project.spoiler}
-      </label>
-      <label className={styles.ProjectCardTags}>
-        {project.tags && project.tags.map(tag => `#${tag} `)}
-      </label>
+      </div>
+      <div className={styles.ProjectCardTags}>
+        {project.tech && project.tech.map(tag => `#${tag} `)}
+      </div>
       <div className={styles.ProjectCardBottom}>
-        <label className={styles.ProjectCardBottomText}>
+        <span className={styles.ProjectCardBottomText}>
           <time dateTime={project.date.toUTCString()}>{formatDateWithoutDay(project.date)}</time>
-        </label>
-        <Link
+        </span>
+        {/* <Link
           className={styles.ProjectCardBottomText}
-          href={join(blogRoot, 'projects', project.slug.toLowerCase())} 
+          href={}
         >
-          Read more...
-        </Link>
+          Details
+        </Link> */}
       </div>
     </div>
-  )
+  );
 }
 
 export default ProjectCard;

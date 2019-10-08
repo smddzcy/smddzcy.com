@@ -1,7 +1,7 @@
 import React from 'react';
 import importAll from 'import-all.macro';
 import * as Navi from 'navi';
-import slugify from 'slugify'
+import slugify from 'slugify';
 import ProjectsPage from '../../components/ProjectsPage';
 import ProjectPage from '../../components/ProjectPage';
 
@@ -9,11 +9,11 @@ const projectModules = importAll.deferred('./**/project.js');
 const projectPathnames = Object.keys(projectModules);
 const datePattern = /(\d{1,4})\w+/g;
 
-let projects = projectPathnames.map(pathname => {
+const projects = projectPathnames.map(pathname => {
   const slug = slugify(
     pathname.replace(/project.jsx?$/, '').replace(/(\d)\/(\d)/, '$1-$2'),
   )
-    .replace(/^[-.]+|[.-]+$/g, '')
+    .replace(/^[-.]+|[.-]+$/g, '');
 
   const details = require(`${pathname}`).default;
 
@@ -36,19 +36,17 @@ const projectRoutes = Navi.compose(
     ...context,
     projectsRoot: req.mountpath,
   })),
-  
+
   Navi.mount({
     '/': Navi.route({
       title: 'Projects',
 
-      getView: async (req, context) => {
-        return (
-          <ProjectsPage
-            blogRoot={context.blogRoot}
-            projects={projects}
-          />
-        );
-      },
+      getView: async (req, context) => (
+        <ProjectsPage
+          blogRoot={context.blogRoot}
+          projects={projects}
+        />
+      ),
     }),
 
     '/:project': Navi.route({
@@ -57,16 +55,18 @@ const projectRoutes = Navi.compose(
         const project = projects.filter(project => req.originalUrl.includes(project.slug))[0];
         const { default: MDXComponent } = await project.getContent();
         const idx = projects.indexOf(project);
-        return <ProjectPage
-          MDXComponent={MDXComponent}
-          data={{
-            project,
-            previousProject: idx !== 0 ? projects[idx - 1] : null,
-            nextProject: idx !== projects.length - 1 ? projects[idx + 1] : null,
-          }}
-          blogRoot={context.blogRoot}
-        />
-      }
+        return (
+          <ProjectPage
+            MDXComponent={MDXComponent}
+            data={{
+              project,
+              previousProject: idx !== 0 ? projects[idx - 1] : null,
+              nextProject: idx !== projects.length - 1 ? projects[idx + 1] : null,
+            }}
+            blogRoot={context.blogRoot}
+          />
+        );
+      },
     }),
   }),
 );
