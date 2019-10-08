@@ -7,7 +7,7 @@ export default {
   title: 'EasyKnock Deal Portal',
   spoiler: 'An internal Excel-like dashboard for sales management.',
   url: 'https://www.easyknock.com/',
-  type: 'Dashboard',
+  type: 'Web application',
   tech: [
     'React', 'Redux', 'Node.js', 'PostgreSQL',
   ],
