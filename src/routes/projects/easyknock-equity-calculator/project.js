@@ -13,7 +13,7 @@ export default {
   url: 'https://www.easyknock.com/',
   appUrl: 'https://qualify.easyknock.com/',
   type: 'Web application',
-  tech: ['React', 'Redux'],
+  tech: ['React', 'Redux', 'Webpack'],
   date: '2018-09-01',
   logo,
   screenshots: [ss1, ss2, ss3, ss4, ss5, ss6],

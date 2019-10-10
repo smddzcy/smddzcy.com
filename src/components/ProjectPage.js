@@ -65,6 +65,8 @@ function ProjectPage({ blogRoot, MDXComponent, data }) {
         <meta property="og:description" content={project.spoiler} />
         <meta property="og:url" content={postUrl} />
         <meta property="og:site_name" content="smddzcy" />
+        <meta property="article:tag" content="Freelance" key="Freelance" />
+        <meta property="article:tag" content="App Development" key="App Development" />
         {project.tech.map(tag => (
           <meta property="article:tag" content={tag} key={tag} />
         ))}

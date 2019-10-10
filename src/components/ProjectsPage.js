@@ -12,6 +12,7 @@ function ProjectsPage({ blogRoot, projects }) {
           <ProjectCard key={project.slug} blogRoot={blogRoot} project={project} idx={idx} />
         ))}
       </div>
+      <p>... and many more confidential projects. Contact me at <a href="mailto:samedduzcay@gmail.com">samedduzcay@gmail.com</a> for any requests.</p>
     </div>
   );
 }

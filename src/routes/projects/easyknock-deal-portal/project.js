@@ -9,7 +9,7 @@ export default {
   url: 'https://www.easyknock.com/',
   type: 'Web application',
   tech: [
-    'React', 'Redux', 'Node.js', 'PostgreSQL',
+    'React', 'Redux', 'Webpack', 'Node.js', 'PostgreSQL',
   ],
   date: '2019-03-01',
   logo,
