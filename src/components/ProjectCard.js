@@ -8,7 +8,7 @@ function ProjectCard({ blogRoot, project, idx }) {
   const navigation = useNavigation();
   const goToProject = useCallback(() => {
     navigation.navigate(join(blogRoot, 'projects', project.slug.toLowerCase()));
-  }, [blogRoot, project.slug]);
+  }, [navigation, blogRoot, project.slug]);
   return (
     <div
       className={styles.ProjectCard}

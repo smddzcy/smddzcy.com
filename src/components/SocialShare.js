@@ -1,8 +1,4 @@
 import React from 'react';
-import { View, Link, useCurrentRoute } from 'react-navi';
-import { MDXProvider } from '@mdx-js/tag';
-import { DiscussionEmbed } from 'disqus-react';
-import Helmet from 'react-helmet';
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -15,10 +11,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFacebookF, faTwitter, faLinkedinIn, faRedditAlien, faWhatsapp, faTelegram,
 } from '@fortawesome/free-brands-svg-icons';
-import { camelCase } from 'change-case';
-import siteMetadata from '../siteMetadata';
-import ArticleMeta from './ArticleMeta';
-import Bio from './Bio';
 import styles from './BlogPostLayout.module.css';
 
 function SocialShare(config) {

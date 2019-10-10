@@ -41,7 +41,7 @@ function ProjectPage({ blogRoot, MDXComponent, data }) {
     return () => {
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [selectedImageIdx]);
+  }, [selectedImageIdx, project.screenshots.length]);
 
   useEffect(() => {
     if (selectedImageIdx != null) {
@@ -50,7 +50,7 @@ function ProjectPage({ blogRoot, MDXComponent, data }) {
     return () => {
       document.querySelector('html').style.overflow = null;
     };
-  }, [selectedImageIdx == null]);
+  }, [selectedImageIdx]);
 
   const stopPropagation = useCallback(e => e.stopPropagation(), []);
   const postUrl = `https://smddzcy.com/projects/${project.slug}`;

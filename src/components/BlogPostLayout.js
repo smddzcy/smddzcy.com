@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Link, useCurrentRoute } from 'react-navi';
-import { MDXProvider } from '@mdx-js/tag';
 import { DiscussionEmbed } from 'disqus-react';
 import Helmet from 'react-helmet';
 import { camelCase } from 'change-case';
