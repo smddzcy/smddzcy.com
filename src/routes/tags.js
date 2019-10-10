@@ -3,7 +3,7 @@ import {
   compose, crawl, mount, resolve, route, withContext, withCrawlerPatterns,
 } from 'navi';
 import { join } from 'path';
-import { fromPairs } from 'lodash';
+import fromPairs from 'lodash/fromPairs';
 import TagIndexPage from '../components/TagIndexPage';
 import TagPage from '../components/TagPage';
 import routes from './index';
@@ -90,7 +90,6 @@ const tagRoutes = compose(
             tagRoutes.push(route);
           }
         });
-
         return (
           <TagPage
             blogRoot={context.blogRoot}

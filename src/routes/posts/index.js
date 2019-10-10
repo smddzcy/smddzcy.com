@@ -1,7 +1,7 @@
 import importAll from 'import-all.macro';
 import * as Navi from 'navi';
 import { join } from 'path';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import slugify from 'slugify';
 
 // Get a list of all posts, that will not be loaded until the user

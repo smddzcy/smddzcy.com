@@ -3,7 +3,8 @@ import {
 } from 'navi';
 import React from 'react';
 import { join } from 'path';
-import { chunk, fromPairs } from 'lodash';
+import chunk from 'lodash/chunk';
+import fromPairs from 'lodash/fromPairs';
 import BlogIndexPage from '../components/BlogIndexPage';
 import BlogLayout from '../components/BlogLayout';
 import BlogPostLayout from '../components/BlogPostLayout';
@@ -96,6 +97,7 @@ const routes = compose(
     '/tags': lazy(() => import('./tags')),
     '/about': lazy(() => import('./about')),
     '/travel-map': lazy(() => import('./travel-map')),
+    '/projects': lazy(() => import('./projects')),
 
     // Only the statically built copy of the RSS feed is intended to be opened,
     // but the route is defined here so that the static renderer will pick it
