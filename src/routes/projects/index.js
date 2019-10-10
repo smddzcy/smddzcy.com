@@ -1,6 +1,7 @@
 import React from 'react';
 import importAll from 'import-all.macro';
 import * as Navi from 'navi';
+import fromPairs from 'lodash/fromPairs';
 import slugify from 'slugify';
 import sortBy from 'lodash/sortBy';
 import ProjectsPage from '../../components/ProjectsPage';
@@ -50,28 +51,31 @@ const projectRoutes = Navi.compose(
       ),
     }),
 
-    '/:project': Navi.route({
-      getTitle: req => {
-        const project = projects.filter(project => req.originalUrl.includes(project.slug))[0];
-        return project.title;
-      },
-      getView: async (req, context) => {
-        const project = projects.filter(project => req.originalUrl.includes(project.slug))[0];
-        const { default: MDXComponent } = await project.getContent();
-        const idx = projects.indexOf(project);
-        return (
-          <ProjectPage
-            MDXComponent={MDXComponent}
-            data={{
-              project,
-              previousProject: idx !== 0 ? projects[idx - 1] : null,
-              nextProject: idx !== projects.length - 1 ? projects[idx + 1] : null,
-            }}
-            blogRoot={context.blogRoot}
-          />
-        );
-      },
-    }),
+    ...fromPairs(projects.map(project => [
+      `/${project.slug}`,
+      Navi.route({
+        getTitle: req => {
+          const project = projects.filter(project => req.originalUrl.includes(project.slug))[0];
+          return project.title;
+        },
+        getView: async (req, context) => {
+          const project = projects.filter(project => req.originalUrl.includes(project.slug))[0];
+          const { default: MDXComponent } = await project.getContent();
+          const idx = projects.indexOf(project);
+          return (
+            <ProjectPage
+              MDXComponent={MDXComponent}
+              data={{
+                project,
+                previousProject: idx !== 0 ? projects[idx - 1] : null,
+                nextProject: idx !== projects.length - 1 ? projects[idx + 1] : null,
+              }}
+              blogRoot={context.blogRoot}
+            />
+          );
+        },
+      }),
+    ])),
   }),
 );
 

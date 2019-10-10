@@ -3,7 +3,8 @@ import {
 } from 'navi';
 import React from 'react';
 import { join } from 'path';
-import { chunk, fromPairs } from 'lodash';
+import chunk from 'lodash/chunk';
+import fromPairs from 'lodash/fromPairs';
 import BlogIndexPage from '../components/BlogIndexPage';
 import BlogLayout from '../components/BlogLayout';
 import BlogPostLayout from '../components/BlogPostLayout';

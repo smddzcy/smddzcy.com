@@ -154,6 +154,7 @@ function ProjectPage({ blogRoot, MDXComponent, data }) {
         )}
         <h2>
           <span>Date</span>: <time dateTime={project.date.toUTCString()}>{formatDateWithoutDay(project.date)}</time>
+          {/* TODO: add project end date */}
         </h2>
         <h2>
           <span>Type</span>: {project.type}
@@ -184,6 +185,8 @@ function ProjectPage({ blogRoot, MDXComponent, data }) {
           className={styles.CarouselVideo}
           controls
           muted
+          autoPlay={false}
+          preload="auto"
           key={project.title}
         >
           <source src={project.video} type="video/mp4" />
