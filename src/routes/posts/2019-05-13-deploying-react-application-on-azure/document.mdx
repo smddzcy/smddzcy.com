@@ -18,7 +18,7 @@ We're going to let Node serve both our React application and the backend API, so
 
 ```bash
 cd NewAzureApp
-yarn add express body-parser cors helmet morgan
+npm install -S express body-parser cors helmet morgan
 ```
 
 Create a file called `app.js` at the project root:
@@ -72,7 +72,7 @@ app.listen(port, () => {
 Now when you build your React application and run `app.js`, it will automatically serve your app + API together:
 
 ```bash
-yarn build
+npm run build
 node app.js
 # go to localhost:3000 to see your React app
 # you can also access your API endpoints from localhost:3000/api

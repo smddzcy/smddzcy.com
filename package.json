@@ -37,7 +37,7 @@
     "eject": "react-scripts eject",
     "serve": "navi-scripts serve",
     "generate": "plop --plopfile generators/index.js",
-    "predeploy": "yarn build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
