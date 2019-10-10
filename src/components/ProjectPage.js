@@ -186,7 +186,6 @@ function ProjectPage({ blogRoot, MDXComponent, data }) {
           controls
           muted
           autoPlay={false}
-          preload="auto"
           key={project.title}
         >
           <source src={project.video} type="video/mp4" />
