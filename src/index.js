@@ -1,5 +1,6 @@
 import register from 'navi-scripts/register';
 import { createBrowserNavigation } from 'navi';
+import HelmetProvider from 'react-navi-helmet';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
@@ -42,7 +43,9 @@ register({
     // Start react, passing in the current navigation state and
     // rendering the top-level view.
     renderer(
-      <Router navigation={navigation} />,
+      <HelmetProvider>
+        <Router navigation={navigation} />
+      </HelmetProvider>,
       document.getElementById('root')
     );
   },

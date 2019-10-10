@@ -24,6 +24,7 @@
     "react-helmet": "^5.2.1",
     "react-jvectormap": "^0.0.14",
     "react-navi": "^0.13.6",
+    "react-navi-helmet": "^0.13.6",
     "react-scripts-mdx": "3.0.3",
     "react-share": "^3.0.1",
     "react-swipeable": "^5.4.0",
