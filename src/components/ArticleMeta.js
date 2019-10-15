@@ -10,12 +10,12 @@ function ArticleMeta({ blogRoot, meta, readingTime }) {
     const minutes = Math.max(Math.round(readingTime.minutes), 1);
     const cups = Math.round(minutes / 5);
     readingTimeElement = (
-      <React.Fragment>
+      <>
         {' '}&bull;{' '}
         <span className={styles.readingTime}>
           {new Array(cups || 1).fill('☕️').join('')} {minutes} min read
         </span>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -26,16 +26,16 @@ function ArticleMeta({ blogRoot, meta, readingTime }) {
         meta.tags
         && meta.tags.length
         && (
-        <>
-          {meta.date && ' • '}
-          <ul className={styles.tags}>
-            {meta.tags.map(tag => (
-              <li key={tag}>
-                <Link href={join(blogRoot, 'tags', tag)}>{tag}</Link>
-              </li>
-            ))}
-          </ul>
-        </>
+          <>
+            {meta.date && ' • '}
+            <ul className={styles.tags}>
+              {meta.tags.map(tag => (
+                <li key={tag}>
+                  <Link href={join(blogRoot, 'tags', tag)}>{tag}</Link>
+                </li>
+              ))}
+            </ul>
+          </>
         )
       }
       {readingTimeElement || null}
