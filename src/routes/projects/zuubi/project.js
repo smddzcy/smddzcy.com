@@ -13,7 +13,7 @@ import video from './video.mp4';
 
 export default {
   title: 'Zuubi',
-  spoiler: 'AirBnB for electric car chargers. Book chargers, rent your own charger.',
+  spoiler: 'AirBnB for electric-car chargers. Book chargers, rent your own charger.',
   url: 'https://www.zuubi.uk/',
   appUrl: 'https://apps.apple.com/us/app/zuubi/id1479840772',
   type: 'Cross-platform mobile app, landing page',

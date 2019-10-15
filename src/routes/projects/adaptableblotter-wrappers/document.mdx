@@ -1,12 +1,17 @@
 <div>
 <h2>Context</h2>
 
-Adaptable Blotter is a flexible and powerful HTML5 DataGrid solution that integrates with a number of HTML5 vendor DataGrids. It adds new functionalities and improves the existing functionalities of these vendors, and most importantly it lets you use different datagrid solutions through a unified API.
+Adaptable Blotter is a flexible and powerful HTML5 DataGrid solution that integrates with several HTML5 vendor DataGrids. It adds new functionalities and improves the existing functionalities of these vendors, and most importantly it lets you use different datagrid solutions through a unified API.
 
 The only problem: Adaptable Blotter was a pure JS solution, so it was hard for its users to use it in a modern web framework like Angular, React, or Vue.
 
 <h2>Work</h2>
 
-I improved the existing codebase and made it easy to write wrappers around it, then I implemented [Angular](https://github.com/AdaptableTools/adaptableblotter/tree/master/packages/adaptableblotter-ng-aggrid) and [React](https://github.com/AdaptableTools/adaptableblotter/tree/master/packages/adaptableblotter-react-aggrid) wrappers for the library and published them on NPM. It was hard to maintain 3 different repositories on GitHub, so I also turned them into a *monorepo* with [Lerna](https://github.com/lerna/lerna).
+I worked for the library for a couple of months and I made lots of contributions:
+
+* I improved the existing codebase and made it easy to write wrappers around it,
+* I implemented [Angular](https://github.com/AdaptableTools/adaptableblotter/tree/master/packages/adaptableblotter-ng-aggrid) and [React](https://github.com/AdaptableTools/adaptableblotter/tree/master/packages/adaptableblotter-react-aggrid) wrappers for the library and published them on NPM,
+* It was hard to maintain 3 different repositories on GitHub, so I turned them into a *monorepo* with [Lerna](https://github.com/lerna/lerna),
+* Builds were taking a lot of time for the wrappers, so I changed from **Webpack** to **Rollup**, optimized build times and decreased output sizes.
 
 </div>
