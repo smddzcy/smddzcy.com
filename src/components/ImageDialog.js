@@ -8,17 +8,15 @@ function ImageDialog({ img }) {
     <div>
       <img
         className={styles.small}
+        alt="close"
         src={img}
         onClick={() => setOpen(!isOpen)}
       />
       {isOpen && (
-        <dialog
-          className="dialog"
-          open
-          onClick={() => setOpen(!isOpen)}
-        >
+        <dialog className="dialog" open onClick={() => setOpen(!isOpen)}>
           <img
             className={styles.image}
+            alt="close"
             src={img}
             onClick={() => setOpen(!isOpen)}
           />

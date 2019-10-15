@@ -99,8 +99,7 @@ function BlogPostLayout({ blogRoot }) {
             </section>
           </footer>
         </article>
-      )
-      }
+      )}
     </View>
   );
 }

@@ -22,6 +22,8 @@ module.exports = {
     "import/no-extraneous-dependencies": 0,
     "jsx-a11y/anchor-is-valid": 0,
     "no-shadow": "off",
+    "react/jsx-props-no-spreading": 0,
+    "react/jsx-curly-newline": 0,
     "no-unused-expressions": [
       "error",
       {
