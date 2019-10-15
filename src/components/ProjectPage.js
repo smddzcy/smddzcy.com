@@ -191,6 +191,9 @@ function ProjectPage({ blogRoot, MDXComponent, data }) {
           <source src={project.video} type="video/mp4" />
         </video>
         )}
+        {project.youtubeEmbed && (
+          <div className={styles.CarouselVideo} dangerouslySetInnerHTML={{ __html: project.youtubeEmbed }} />
+        )}
       </div>
 
       <div className={styles.contactUs}>

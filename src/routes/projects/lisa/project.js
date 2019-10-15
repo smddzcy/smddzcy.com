@@ -15,7 +15,7 @@ export default {
   tech: [
     'React', 'React Native', 'Node.js', 'MongoDB', 'Scala', 'Hadoop', 'Spark', 'HBase',
   ],
-  date: '2018-10-01',
+  date: '2019-02-01',
   logo,
   screenshots: [ss1, ss2, ss3, ss4, ss5, ss6],
   video,
