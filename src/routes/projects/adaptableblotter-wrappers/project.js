@@ -6,7 +6,7 @@ import ss4 from './screenshots/4.png';
 import ss5 from './screenshots/5.png';
 
 export default {
-  title: 'Adaptable Blotter',
+  title: 'AdaptableBlotter',
   spoiler: 'An HTML5 library that integrates with vendor datagrids and provides additional functionality through a unified API.',
   url: 'http://www.adaptabletools.com/',
   appUrl: 'https://demo.adaptableblotter.com/',

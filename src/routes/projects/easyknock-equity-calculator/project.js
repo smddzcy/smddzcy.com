@@ -8,7 +8,7 @@ import ss6 from './screenshots/6.png';
 import video from './video.mp4';
 
 export default {
-  title: 'EasyKnock Equity Calculator',
+  title: 'EasyKnock - Equity Calculator',
   spoiler: 'An interactive form to collect pre-sales user information.',
   url: 'https://www.easyknock.com/',
   appUrl: 'https://qualify.easyknock.com/',

@@ -4,7 +4,7 @@ import ss2 from './screenshots/2.png';
 import video from './video.mp4';
 
 export default {
-  title: 'EasyKnock Deal Portal',
+  title: 'EasyKnock - Deal Portal',
   spoiler: 'An internal Excel-like dashboard for sales management.',
   url: 'https://www.easyknock.com/',
   type: 'Web application',
